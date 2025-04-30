@@ -1,0 +1,80 @@
+# MVP Dataset Requirements for ConvLSTM Crowd Crush Model
+
+Here's a detailed breakdown of what we need for a minimum viable dataset to train the ConvLSTM model for crowd crush prediction:
+
+## Size and Composition
+
+- **Total Sequences**: 50-100 distinct crowd movement sequences
+- **Frames per Sequence**: 10-15 consecutive frames per sequence
+- **Resolution**: Consistent resolution across all frames
+- **Class Balance**: 30-40% should contain crowd crush conditions
+
+## Data Format Requirements
+
+1. **Input Sequence Format**:
+   - Tensor shape: `(batch, seq_len, channels, height, width)`
+   - Each frame represented as a density map (0-1 normalized values)
+   - Single channel (grayscale) is sufficient
+
+2. **Ground Truth Format**:
+   - Binary maps indicating crush/non-crush regions
+   - Same spatial dimensions as input frames
+   - Can be derived from density thresholds (areas exceeding critical density)
+
+## Essential Scenario Variations
+
+The MVP dataset must include:
+
+1. **Basic Scenarios** (50% of dataset):
+   - Bidirectional flow in corridors
+   - Four-way intersections
+   - Simple room evacuation
+
+2. **Critical Scenarios** (50% of dataset):
+   - Bottleneck formations (doorways, narrowing corridors)
+   - Obstacle-induced congestion
+   - Counter-flow with density buildup
+   - Sudden direction changes causing compression
+
+## Environmental Variations
+
+Include at minimum:
+
+- 3-5 different venue layouts
+- 2-3 different crowd densities per layout
+- 2-3 different movement patterns per layout
+
+Lets go for 10 scenarios total
+
+## Camera Perspectives
+
+- At least 2 different camera angles per venue
+- Overhead view (for easier ground truth mapping) - Call it drone
+- One more realistic surveillance-style angle (for real-world application) - Call it CCTV
+
+## UMANS + ChAOS RC Implementation Steps
+
+1. **Create Base Environments**:
+   - Design 3-5 simple venue layouts in UMANS
+   - Include at least one with corridors and one with an open space + obstacles
+
+2. **Generate Crowd Movements**:
+   - Configure 8-10 crowd movement patterns (bidirectional, evacuation, etc.)
+   - Ensure some patterns create natural density buildups
+
+3. **Simulation Parameters**:
+   - Low density: ~1-2 agents/m²
+   - Medium density: ~3-4 agents/m²
+   - High density: ~5-7 agents/m² (crush-prone)
+   - Vary walking speeds between 0.8-1.5 m/s
+
+4. **Data Collection Process**:
+   - Run each scenario in UMANS to generate trajectory data
+   - Import trajectories into ChAOS RC for visualization
+   - Capture camera views at 3-5 frames per second
+   - Extract density maps from trajectory data (convert positions to 2D density)
+   - Create ground truth by thresholding density (>4-5 agents/m² as crush risk)
+
+## How to make the most of it
+We also want to stretch the dataset with some simple augmentation
+Eg: geometric transformations for the image and GT

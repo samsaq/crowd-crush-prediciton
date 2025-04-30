@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Experiment>
+  <Description>Festival Crowd - Multiple attractions with changing crowd flows</Description>
+  
+  <World>
+    <Objects>
+      <!-- Festival boundary walls -->
+      <Object name="boundary_top" type="Rectangle" x="0" y="40" width="80" height="1" />
+      <Object name="boundary_bottom" type="Rectangle" x="0" y="-40" width="80" height="1" />
+      <Object name="boundary_left" type="Rectangle" x="-40" y="0" width="1" height="80" />
+      <Object name="boundary_right" type="Rectangle" x="40" y="0" width="1" height="80" />
+      
+      <!-- Stage areas -->
+      <Object name="main_stage" type="Rectangle" x="0" y="30" width="30" height="10" />
+      <Object name="secondary_stage1" type="Rectangle" x="-30" y="-20" width="15" height="8" />
+      <Object name="secondary_stage2" type="Rectangle" x="30" y="-20" width="15" height="8" />
+      
+      <!-- Food/vendor areas -->
+      <Object name="food_area1" type="Rectangle" x="-30" y="15" width="10" height="5" />
+      <Object name="food_area2" type="Rectangle" x="30" y="15" width="10" height="5" />
+      <Object name="food_area3" type="Rectangle" x="0" y="-30" width="15" height="5" />
+      
+      <!-- Toilets/services -->
+      <Object name="services1" type="Rectangle" x="-25" y="-5" width="5" height="5" />
+      <Object name="services2" type="Rectangle" x="25" y="-5" width="5" height="5" />
+    </Objects>
+  </World>
+  
+  <PolicyMakers>
+    <!-- Main stage audience policy -->
+    <PolicyMaker name="PM-main-stage" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.0" />
+        <Parameter name="goal_point" value="0,25" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <!-- Secondary stages audience policies -->
+    <PolicyMaker name="PM-stage1" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.0" />
+        <Parameter name="goal_point" value="-30,-15" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <PolicyMaker name="PM-stage2" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.0" />
+        <Parameter name="goal_point" value="30,-15" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <!-- Food area policies -->
+    <PolicyMaker name="PM-food1" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.2" />
+        <Parameter name="goal_point" value="-30,12" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <PolicyMaker name="PM-food2" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.2" />
+        <Parameter name="goal_point" value="30,12" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <PolicyMaker name="PM-food3" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.2" />
+        <Parameter name="goal_point" value="0,-27" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <!-- Services policies -->
+    <PolicyMaker name="PM-services1" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.3" />
+        <Parameter name="goal_point" value="-25,-5" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <PolicyMaker name="PM-services2" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.3" />
+        <Parameter name="goal_point" value="25,-5" />
+      </Parameters>
+    </PolicyMaker>
+  </PolicyMakers>
+  
+  <Agents>
+    <!-- Main stage area crowd -->
+    <Generator type="RandomGenerator">
+      <Parameters>
+        <Parameter name="policy_maker_distribution" value="PM-main-stage=1.0" />
+        <Parameter name="agent_radius" value="0.25" />
+        <Parameter name="agent_mass" value="75" />
+        <Parameter name="count" value="250" />
+        <Parameter name="position_region" value="Rectangle,-15,15,30,10" />
+      </Parameters>
+    </Generator>
+    
+    <!-- Crowd near stage 1 -->
+    <Generator type="RandomGenerator">
+      <Parameters>
+        <Parameter name="policy_maker_distribution" value="PM-stage1=1.0" />
+        <Parameter name="agent_radius" value="0.25" />
+        <Parameter name="agent_mass" value="75" />
+        <Parameter name="count" value="80" />
+        <Parameter name="position_region" value="Rectangle,-35,-25,10,10" />
+      </Parameters>
+    </Generator>
+    
+    <!-- Crowd near stage 2 -->
+    <Generator type="RandomGenerator">
+      <Parameters>
+        <Parameter name="policy_maker_distribution" value="PM-stage2=1.0" />
+        <Parameter name="agent_radius" value="0.25" />
+        <Parameter name="agent_mass" value="75" />
+        <Parameter name="count" value="80" />
+        <Parameter name="position_region" value="Rectangle,25,-25,10,10" />
+      </Parameters>
+    </Generator>
+    
+    <!-- Moving crowds between attractions -->
+    <Generator type="RandomGenerator">
+      <Parameters>
+        <Parameter name="policy_maker_distribution" value="PM-food1=0.15;PM-food2=0.15;PM-food3=0.15;PM-services1=0.15;PM-services2=0.15;PM-main-stage=0.1;PM-stage1=0.075;PM-stage2=0.075" />
+        <Parameter name="agent_radius" value="0.25" />
+        <Parameter name="agent_mass" value="75" />
+        <Parameter name="count" value="150" />
+        <Parameter name="position_region" value="Rectangle,-35,-35,70,70" />
+      </Parameters>
+    </Generator>
+  </Agents>
+  
+  <AgentInteraction>
+    <Algorithm type="ORCA">
+      <Parameters>
+        <Parameter name="tau" value="1.0" />
+        <Parameter name="neighbor_dist" value="5.0" />
+      </Parameters>
+    </Algorithm>
+  </AgentInteraction>
+  
+  <Duration value="600.0" /> <!-- 10 minutes of simulation -->
+  <TimeStep value="0.05" />
+  <OutputData folder="output_data" />
+</Experiment> 

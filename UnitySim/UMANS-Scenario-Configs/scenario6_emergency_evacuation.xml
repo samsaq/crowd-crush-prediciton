@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Experiment>
+  <Description>Emergency Evacuation - Panic-driven evacuation of a building</Description>
+  
+  <World>
+    <Objects>
+      <!-- Building outer walls -->
+      <Object name="wall_top" type="Rectangle" x="0" y="25" width="50" height="1" />
+      <Object name="wall_bottom" type="Rectangle" x="0" y="-25" width="50" height="1" />
+      <Object name="wall_left" type="Rectangle" x="-25" y="0" width="1" height="50" />
+      <Object name="wall_right" type="Rectangle" x="25" y="0" width="1" height="50" />
+      
+      <!-- Inner walls/obstacles -->
+      <Object name="inner_wall1" type="Rectangle" x="-15" y="10" width="20" height="1" />
+      <Object name="inner_wall2" type="Rectangle" x="15" y="0" width="20" height="1" />
+      <Object name="inner_wall3" type="Rectangle" x="-15" y="-10" width="20" height="1" />
+      <Object name="inner_wall4" type="Rectangle" x="-5" y="0" width="1" height="20" />
+      
+      <!-- Emergency exit - small opening in bottom wall -->
+      <Object name="exit_wall_left" type="Rectangle" x="-20" y="-25" width="10" height="1" />
+      <Object name="exit_wall_right" type="Rectangle" x="20" y="-25" width="10" height="1" />
+    </Objects>
+  </World>
+  
+  <PolicyMakers>
+    <PolicyMaker name="PM-exit-left" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="2.0" /> <!-- Faster speed due to panic -->
+        <Parameter name="goal_point" value="-10,-35" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <PolicyMaker name="PM-exit-center" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="2.0" />
+        <Parameter name="goal_point" value="0,-35" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <PolicyMaker name="PM-exit-right" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="2.0" />
+        <Parameter name="goal_point" value="10,-35" />
+      </Parameters>
+    </PolicyMaker>
+  </PolicyMakers>
+  
+  <Agents>
+    <!-- Randomly distributed agents throughout the building -->
+    <Generator type="RandomGenerator">
+      <Parameters>
+        <Parameter name="policy_maker_distribution" value="PM-exit-left=0.3;PM-exit-center=0.4;PM-exit-right=0.3" />
+        <Parameter name="agent_radius" value="0.25" />
+        <Parameter name="agent_mass" value="75" />
+        <Parameter name="count" value="350" />
+        <Parameter name="position_region" value="Rectangle,-23,23,46,46" />
+      </Parameters>
+    </Generator>
+  </Agents>
+  
+  <AgentInteraction>
+    <Algorithm type="ORCA">
+      <Parameters>
+        <Parameter name="tau" value="0.5" /> <!-- Shorter time horizon due to panic -->
+        <Parameter name="neighbor_dist" value="5.0" />
+        <Parameter name="time_horizon" value="1.0" /> <!-- Shorter time horizon for agent-agent avoidance -->
+        <Parameter name="time_horizon_obst" value="0.75" /> <!-- Shorter time horizon for obstacle avoidance -->
+      </Parameters>
+    </Algorithm>
+  </AgentInteraction>
+  
+  <Duration value="180.0" /> <!-- 3 minutes of simulation -->
+  <TimeStep value="0.05" />
+  <OutputData folder="output_data" />
+</Experiment> 

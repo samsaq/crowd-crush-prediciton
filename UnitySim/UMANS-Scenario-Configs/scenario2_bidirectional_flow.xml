@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Experiment>
+  <Description>Bidirectional Flow - Cross-stream crowd instability</Description>
+  
+  <World>
+    <Objects>
+      <!-- Corridor boundaries -->
+      <Object name="wall_top" type="Rectangle" x="0" y="5" width="50" height="1" />
+      <Object name="wall_bottom" type="Rectangle" x="0" y="-5" width="50" height="1" />
+    </Objects>
+  </World>
+  
+  <PolicyMakers>
+    <PolicyMaker name="PM-left-to-right" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.3" />
+        <Parameter name="goal_point" value="45,0" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <PolicyMaker name="PM-right-to-left" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.3" />
+        <Parameter name="goal_point" value="5,0" />
+      </Parameters>
+    </PolicyMaker>
+  </PolicyMakers>
+  
+  <Agents>
+    <!-- Left-to-right moving crowd -->
+    <Generator type="GridGenerator">
+      <Parameters>
+        <Parameter name="policy_maker" value="PM-left-to-right" />
+        <Parameter name="agent_radius" value="0.25" />
+        <Parameter name="agent_mass" value="75" />
+        <Parameter name="row_count" value="8" />
+        <Parameter name="col_count" value="8" />
+        <Parameter name="row_gap" value="0.8" />
+        <Parameter name="col_gap" value="0.8" />
+        <Parameter name="pos_x" value="5" />
+        <Parameter name="pos_y" value="0" />
+        <Parameter name="noise" value="0.2" />
+      </Parameters>
+    </Generator>
+    
+    <!-- Right-to-left moving crowd -->
+    <Generator type="GridGenerator">
+      <Parameters>
+        <Parameter name="policy_maker" value="PM-right-to-left" />
+        <Parameter name="agent_radius" value="0.25" />
+        <Parameter name="agent_mass" value="75" />
+        <Parameter name="row_count" value="8" />
+        <Parameter name="col_count" value="8" />
+        <Parameter name="row_gap" value="0.8" />
+        <Parameter name="col_gap" value="0.8" />
+        <Parameter name="pos_x" value="45" />
+        <Parameter name="pos_y" value="0" />
+        <Parameter name="noise" value="0.2" />
+      </Parameters>
+    </Generator>
+  </Agents>
+  
+  <AgentInteraction>
+    <Algorithm type="ORCA">
+      <Parameters>
+        <Parameter name="tau" value="1.5" />
+      </Parameters>
+    </Algorithm>
+  </AgentInteraction>
+  
+  <Duration value="120.0" /> <!-- 2 minutes of simulation -->
+  <TimeStep value="0.05" />
+  <OutputData folder="output_data" />
+</Experiment> 

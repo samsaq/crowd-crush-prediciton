@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Experiment>
+  <Description>Concert Exit - Large crowd exiting through limited exits</Description>
+  
+  <World>
+    <Objects>
+      <!-- Venue boundaries -->
+      <Object name="wall_top" type="Rectangle" x="0" y="30" width="60" height="1" />
+      <Object name="wall_bottom" type="Rectangle" x="0" y="-30" width="60" height="1" />
+      <Object name="wall_left" type="Rectangle" x="-30" y="0" width="1" height="60" />
+      <Object name="wall_right" type="Rectangle" x="30" y="0" width="1" height="60" />
+      
+      <!-- Exit doorways - limited width on bottom wall -->
+      <Object name="wall_segment1" type="Rectangle" x="-25" y="-30" width="15" height="1" />
+      <Object name="wall_segment2" type="Rectangle" x="-5" y="-30" width="10" height="1" />
+      <Object name="wall_segment3" type="Rectangle" x="10" y="-30" width="10" height="1" />
+      <Object name="wall_segment4" type="Rectangle" x="25" y="-30" width="15" height="1" />
+      
+      <!-- Stage area - to block center of venue -->
+      <Object name="stage" type="Rectangle" x="0" y="15" width="20" height="10" />
+    </Objects>
+  </World>
+  
+  <PolicyMakers>
+    <PolicyMaker name="PM-exit-left" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.5" />
+        <Parameter name="goal_point" value="-10,-35" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <PolicyMaker name="PM-exit-middle" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.5" />
+        <Parameter name="goal_point" value="0,-35" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <PolicyMaker name="PM-exit-right" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.5" />
+        <Parameter name="goal_point" value="20,-35" />
+      </Parameters>
+    </PolicyMaker>
+  </PolicyMakers>
+  
+  <Agents>
+    <!-- Random distribution of agents in the venue -->
+    <Generator type="RandomGenerator">
+      <Parameters>
+        <Parameter name="policy_maker_distribution" value="PM-exit-left=0.33;PM-exit-middle=0.33;PM-exit-right=0.34" />
+        <Parameter name="agent_radius" value="0.25" />
+        <Parameter name="agent_mass" value="75" />
+        <Parameter name="count" value="400" />
+        <Parameter name="position_region" value="Rectangle,-25,-25,50,40" /> <!-- Avoid stage area -->
+      </Parameters>
+    </Generator>
+  </Agents>
+  
+  <AgentInteraction>
+    <Algorithm type="ORCA">
+      <Parameters>
+        <Parameter name="tau" value="1.0" />
+        <Parameter name="time_horizon_obst" value="2.0" />
+      </Parameters>
+    </Algorithm>
+  </AgentInteraction>
+  
+  <Duration value="300.0" /> <!-- 5 minutes of simulation -->
+  <TimeStep value="0.05" />
+  <OutputData folder="output_data" />
+</Experiment> 

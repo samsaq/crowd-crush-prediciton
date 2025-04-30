@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Experiment>
+  <Description>Intersection Crossing - Multiple directional flows creating turbulence</Description>
+  
+  <World>
+    <Objects>
+      <!-- Intersection boundaries -->
+      <Object name="north_west" type="Rectangle" x="-25" y="25" width="15" height="1" />
+      <Object name="north_east" type="Rectangle" x="25" y="25" width="15" height="1" />
+      <Object name="south_west" type="Rectangle" x="-25" y="-25" width="15" height="1" />
+      <Object name="south_east" type="Rectangle" x="25" y="-25" width="15" height="1" />
+      
+      <Object name="west_north" type="Rectangle" x="-25" y="25" width="1" height="15" />
+      <Object name="west_south" type="Rectangle" x="-25" y="-25" width="1" height="15" />
+      <Object name="east_north" type="Rectangle" x="25" y="25" width="1" height="15" />
+      <Object name="east_south" type="Rectangle" x="25" y="-25" width="1" height="15" />
+    </Objects>
+  </World>
+  
+  <PolicyMakers>
+    <PolicyMaker name="PM-west-to-east" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.4" />
+        <Parameter name="goal_point" value="35,0" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <PolicyMaker name="PM-east-to-west" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.4" />
+        <Parameter name="goal_point" value="-35,0" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <PolicyMaker name="PM-north-to-south" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.4" />
+        <Parameter name="goal_point" value="0,-35" />
+      </Parameters>
+    </PolicyMaker>
+    
+    <PolicyMaker name="PM-south-to-north" type="DesiredVelocityPolicy">
+      <Parameters>
+        <Parameter name="desired_speed" value="1.4" />
+        <Parameter name="goal_point" value="0,35" />
+      </Parameters>
+    </PolicyMaker>
+  </PolicyMakers>
+  
+  <Agents>
+    <!-- West to East crowd -->
+    <Generator type="GridGenerator">
+      <Parameters>
+        <Parameter name="policy_maker" value="PM-west-to-east" />
+        <Parameter name="agent_radius" value="0.25" />
+        <Parameter name="agent_mass" value="75" />
+        <Parameter name="row_count" value="5" />
+        <Parameter name="col_count" value="5" />
+        <Parameter name="row_gap" value="1.0" />
+        <Parameter name="col_gap" value="1.0" />
+        <Parameter name="pos_x" value="-35" />
+        <Parameter name="pos_y" value="0" />
+        <Parameter name="noise" value="0.2" />
+      </Parameters>
+    </Generator>
+    
+    <!-- East to West crowd -->
+    <Generator type="GridGenerator">
+      <Parameters>
+        <Parameter name="policy_maker" value="PM-east-to-west" />
+        <Parameter name="agent_radius" value="0.25" />
+        <Parameter name="agent_mass" value="75" />
+        <Parameter name="row_count" value="5" />
+        <Parameter name="col_count" value="5" />
+        <Parameter name="row_gap" value="1.0" />
+        <Parameter name="col_gap" value="1.0" />
+        <Parameter name="pos_x" value="35" />
+        <Parameter name="pos_y" value="0" />
+        <Parameter name="noise" value="0.2" />
+      </Parameters>
+    </Generator>
+    
+    <!-- North to South crowd -->
+    <Generator type="GridGenerator">
+      <Parameters>
+        <Parameter name="policy_maker" value="PM-north-to-south" />
+        <Parameter name="agent_radius" value="0.25" />
+        <Parameter name="agent_mass" value="75" />
+        <Parameter name="row_count" value="5" />
+        <Parameter name="col_count" value="5" />
+        <Parameter name="row_gap" value="1.0" />
+        <Parameter name="col_gap" value="1.0" />
+        <Parameter name="pos_x" value="0" />
+        <Parameter name="pos_y" value="35" />
+        <Parameter name="noise" value="0.2" />
+      </Parameters>
+    </Generator>
+    
+    <!-- South to North crowd -->
+    <Generator type="GridGenerator">
+      <Parameters>
+        <Parameter name="policy_maker" value="PM-south-to-north" />
+        <Parameter name="agent_radius" value="0.25" />
+        <Parameter name="agent_mass" value="75" />
+        <Parameter name="row_count" value="5" />
+        <Parameter name="col_count" value="5" />
+        <Parameter name="row_gap" value="1.0" />
+        <Parameter name="col_gap" value="1.0" />
+        <Parameter name="pos_x" value="0" />
+        <Parameter name="pos_y" value="-35" />
+        <Parameter name="noise" value="0.2" />
+      </Parameters>
+    </Generator>
+  </Agents>
+  
+  <AgentInteraction>
+    <Algorithm type="ORCA">
+      <Parameters>
+        <Parameter name="tau" value="1.0" />
+        <Parameter name="neighbor_dist" value="10.0" />
+      </Parameters>
+    </Algorithm>
+  </AgentInteraction>
+  
+  <Duration value="180.0" /> <!-- 3 minutes of simulation -->
+  <TimeStep value="0.05" />
+  <OutputData folder="output_data" />
+</Experiment> 
