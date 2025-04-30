@@ -138,3 +138,77 @@ class ConvLSTM(nn.Module):
         uncertainty = torch.std(predictions, dim=0)
 
         return mean_prediction, uncertainty
+
+    def predict_future_with_uncertainty(self, x_seq, future_steps=5, num_samples=10):
+        """
+        Predict future frames with uncertainty estimation using Monte Carlo dropout
+
+        Parameters:
+        ----------
+        x_seq: 5D Tensor of shape (batch, seq_len, channels, height, width)
+        future_steps: Number of future frames to predict
+        num_samples: Number of Monte Carlo samples for uncertainty estimation
+
+        Returns:
+        -------
+        predictions: Tensor of shape (batch, future_steps, 1, height, width) - mean predictions
+        uncertainties: Tensor of shape (batch, future_steps, 1, height, width) - uncertainty estimates
+        """
+        self.train()  # Enable dropout for MC sampling
+        batch_size, seq_len, channels, height, width = x_seq.size()
+        device = x_seq.device
+
+        # Initialize storage for all predictions and current input sequence
+        all_sample_predictions = []
+
+        # For each MC sample
+        for _ in range(num_samples):
+            current_sequence = x_seq.clone()
+            future_sequence = []
+
+            # Predict future frames autoregressively
+            for step in range(future_steps):
+                # Get prediction for next frame
+                next_frame_pred = self.forward(
+                    current_sequence
+                )  # Shape: (batch, 1, height, width)
+
+                # Store prediction
+                future_sequence.append(next_frame_pred)
+
+                # Update sequence for next prediction (remove oldest frame, add new prediction)
+                # Reshape prediction to match expected input format
+                next_frame_pred_expanded = next_frame_pred.unsqueeze(
+                    1
+                )  # Shape: (batch, 1, 1, height, width)
+                # Create channels dimension if needed
+                if channels > 1:
+                    next_frame_pred_expanded = next_frame_pred_expanded.repeat(
+                        1, 1, channels, 1, 1
+                    )
+
+                # Remove oldest frame and append new prediction
+                current_sequence = torch.cat(
+                    [current_sequence[:, 1:], next_frame_pred_expanded], dim=1
+                )
+
+            # Stack all future predictions for this sample
+            future_preds = torch.stack(
+                future_sequence, dim=1
+            )  # (batch, future_steps, 1, height, width)
+            all_sample_predictions.append(future_preds)
+
+        # Stack all samples
+        all_samples = torch.stack(
+            all_sample_predictions, dim=0
+        )  # (num_samples, batch, future_steps, 1, height, width)
+
+        # Calculate mean and standard deviation across samples
+        mean_predictions = torch.mean(
+            all_samples, dim=0
+        )  # (batch, future_steps, 1, height, width)
+        uncertainties = torch.std(
+            all_samples, dim=0
+        )  # (batch, future_steps, 1, height, width)
+
+        return mean_predictions, uncertainties

@@ -328,3 +328,66 @@ def risk_level_to_color(risk_map, uncertainty_map=None, risk_threshold=0.5):
         return rgba_image
 
     return rgb_image
+
+
+def visualize_future_predictions(
+    input_sequence, future_predictions, uncertainties, output_path=None
+):
+    """
+    Visualize future predictions with uncertainty
+
+    Parameters:
+    ----------
+    input_sequence: Input sequence tensor (batch, seq_len, channels, height, width)
+    future_predictions: Predicted future frames (batch, future_steps, 1, height, width)
+    uncertainties: Uncertainty for each prediction (batch, future_steps, 1, height, width)
+    output_path: Path to save visualization
+    """
+    # Use only first sample in batch
+    input_seq = input_sequence[0].cpu().numpy()
+    predictions = future_predictions[0].cpu().numpy()
+    uncertainty = uncertainties[0].cpu().numpy()
+
+    # Get dimensions
+    future_steps = predictions.shape[0]
+
+    # Create figure
+    fig, axes = plt.subplots(3, future_steps + 1, figsize=(4 * (future_steps + 1), 12))
+
+    # Plot last input frame
+    last_input = input_seq[-1, 0]
+    axes[0, 0].imshow(last_input, cmap="viridis")
+    axes[0, 0].set_title("Last Input Frame")
+    axes[0, 0].axis("off")
+    axes[1, 0].axis("off")
+    axes[2, 0].axis("off")
+
+    # Plot predictions and uncertainties
+    for t in range(future_steps):
+        # Plot prediction
+        axes[0, t + 1].imshow(predictions[t, 0], cmap="plasma")
+        axes[0, t + 1].set_title(f"Prediction t+{t+1}")
+        axes[0, t + 1].axis("off")
+
+        # Plot uncertainty
+        axes[1, t + 1].imshow(uncertainty[t, 0], cmap="inferno")
+        axes[1, t + 1].set_title(f"Uncertainty t+{t+1}")
+        axes[1, t + 1].axis("off")
+
+        # Plot prediction with uncertainty overlay
+        # Higher uncertainty = more transparent prediction
+        pred = predictions[t, 0]
+        unc = uncertainty[t, 0]
+
+        # Normalize uncertainty to [0,1] for alpha channel
+        norm_unc = 1 - (unc / (unc.max() + 1e-8))
+
+        axes[2, t + 1].imshow(pred, cmap="plasma")
+        axes[2, t + 1].imshow(pred, cmap="plasma", alpha=norm_unc)
+        axes[2, t + 1].set_title(f"Pred with Uncertainty t+{t+1}")
+        axes[2, t + 1].axis("off")
+
+    plt.tight_layout()
+    if output_path:
+        plt.savefig(output_path, dpi=150)
+    plt.show()
