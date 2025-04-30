@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import sys
 import inspect
 from pathlib import Path
+from datetime import datetime
 
 
 # Add ConvLSTM directory to path
@@ -66,6 +67,12 @@ def parse_args():
         type=str,
         default="default",
         help='ConvLSTM model configuration: "small", "medium", "large", or "default"',
+    )
+    parser.add_argument(
+        "--model_checkpoint",
+        type=str,
+        default=None,
+        help="Path to a trained ConvLSTM model checkpoint (.pth file)",
     )
     parser.add_argument(
         "--with_uncertainty",
@@ -129,6 +136,45 @@ def get_model_config(config_name, input_channels=1):
     return configs[config_name]
 
 
+def create_model(config, device, checkpoint_path=None):
+    """
+    Create and optionally load a ConvLSTM model from a checkpoint
+    """
+    # Create model instance
+    model = ConvLSTM(
+        in_channels=config["in_channels"],
+        hidden_channels=config["hidden_channels"],
+        kernel_size=config["kernel_size"],
+        num_layers=config["num_layers"],
+        dropout_rate=config["dropout_rate"],
+    ).to(device)
+
+    # Load checkpoint if provided
+    if checkpoint_path is not None:
+        if not os.path.exists(checkpoint_path):
+            raise FileNotFoundError(f"Checkpoint file not found: {checkpoint_path}")
+
+        print(f"Loading model checkpoint from {checkpoint_path}")
+        checkpoint = torch.load(checkpoint_path, map_location=device)
+
+        # Determine what type of checkpoint this is (full or just state_dict)
+        if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
+            # If checkpoint includes metadata and state_dict under specific key
+            model.load_state_dict(checkpoint["model_state_dict"])
+            print(f"Loaded model state_dict from checkpoint with metadata")
+            # Print checkpoint metadata if available
+            if "epoch" in checkpoint:
+                print(f"  Checkpoint from epoch {checkpoint['epoch']}")
+            if "val_loss" in checkpoint:
+                print(f"  Validation loss: {checkpoint['val_loss']:.6f}")
+        else:
+            # Assume it's just a state_dict
+            model.load_state_dict(checkpoint)
+            print(f"Loaded model state_dict directly from checkpoint")
+
+    return model
+
+
 def main():
     args = parse_args()
 
@@ -159,14 +205,9 @@ def main():
     model_config = get_model_config(args.model_config, input_channels=channels)
 
     print(f"Creating ConvLSTM model with configuration: {args.model_config}")
-    model = ConvLSTM(
-        in_channels=model_config["in_channels"],
-        hidden_channels=model_config["hidden_channels"],
-        kernel_size=model_config["kernel_size"],
-        num_layers=model_config["num_layers"],
-        dropout_rate=model_config["dropout_rate"],
-    ).to(device)
 
+    # Create model, use pretrained weights if given
+    model = create_model(model_config, device, args.model_checkpoint)
     print(f"Model has {sum(p.numel() for p in model.parameters())} parameters")
 
     # Make predictions
@@ -268,6 +309,24 @@ def main():
 
         print(f"Saved visualizations to {vis_dir}")
 
+    # Save a summary file with model and data information
+    summary_path = os.path.join(args.output_dir, "prediction_summary.json")
+    summary_data = {
+        "input_data": args.input,
+        "model_config": args.model_config,
+        "model_checkpoint": args.model_checkpoint,
+        "with_uncertainty": args.with_uncertainty,
+        "num_sequences": num_sequences,
+        "sequence_length": seq_len,
+        "input_shape": list(input_tensor.shape),
+        "prediction_shape": list(predictions.shape),
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    }
+
+    with open(summary_path, "w") as f:
+        json.dump(summary_data, f, indent=2)
+
+    print(f"Saved prediction summary to {summary_path}")
     print("Done!")
 
 
