@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ConfigData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <env_filesPath>./Scenarios/ExampleLookAt/</env_filesPath>
+  <env_obstFile />
+  <env_stageInfos stageName="Building">
+    <file>./Scenarios/Decor/building</file>
+    <position x="0" y="0" z="0" />
+    <rotation x="0" y="0" z="90" />
+  </env_stageInfos>
+  <cam>
+    <cameraType typeID="2" />
+    <position x="15" y="2" z="5" />
+    <rotation x="12.94866" y="4.380253E-07" z="115.3439" />
+    <lookAtAgent agentID="22" />
+    <followAgent agentID="-1" followOnX="false" followOnY="false" lockFirstPerson="false" smoothFirstPerson="true" />
+    <CamResolution x="-1" y="-1" />
+  </cam>
+  <recording start="1" end="10" framerate="15" width="-1" height="-1">
+    <saveImgOriginal record="true" quality="8" width="1" height="-1" />
+    <saveImgSegmentation record="true" quality="8" width="1920" height="1080" />
+    <saveImgCategories record="true" quality="8" width="1280" height="720" />
+    <saveImgDepth record="true" quality="8" width="1000" height="1000" minDepth="0" maxDepth="50" exponent="1" />
+    <saveImgNormals record="true" quality="8" width="720" height="1280" />
+    <saveImgOpticalFlow record="true" quality="8" width="1080" height="1920" motionVector="false" />
+    <saveBodyBoundingBoxes record="true" />
+    <saveHeadBoundingBoxes record="true" />
+    <saveDir>./Output/LookAt/</saveDir>
+  </recording>
+  <AgentColorList />
+</ConfigData>

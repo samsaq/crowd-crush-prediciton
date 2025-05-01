@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ConfigData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <env_filesPath>./Scenarios/ExampleTwoColors/</env_filesPath>
+  <env_obstFile>./Scenarios/Decor/obstExampleTwoColors.xml</env_obstFile>
+  <env_stageInfos stageName="">
+    <file />
+    <position x="0" y="0" z="0" />
+    <rotation x="0" y="0" z="0" />
+  </env_stageInfos>
+  <cam>
+    <cameraType typeID="0" />
+    <position x="0" y="0" z="30" />
+    <rotation x="90" y="0" z="0" />
+    <lookAtAgent agentID="-1" />
+    <followAgent agentID="-1" followOnX="false" followOnY="false" lockFirstPerson="false" smoothFirstPerson="true" />
+    <CamResolution x="-1" y="-1" />
+  </cam>
+  <recording start="0" end="0" framerate="15" width="-1" height="-1">
+    <saveImgOriginal record="true" quality="8" width="-1" height="-1" />
+    <saveImgSegmentation record="false" quality="8" width="-1" height="-1" />
+    <saveImgCategories record="false" quality="8" width="-1" height="-1" />
+    <saveImgDepth record="false" quality="8" width="-1" height="-1" minDepth="0" maxDepth="50" exponent="1" />
+    <saveImgNormals record="false" quality="8" width="-1" height="-1" />
+    <saveImgOpticalFlow record="false" quality="8" width="-1" height="-1" motionVector="false" />
+    <saveBodyBoundingBoxes record="false" />
+    <saveHeadBoundingBoxes record="false" />
+    <saveDir>./Output/TwoColors/</saveDir>
+  </recording>
+  <AgentColorList>
+    <color firstAgent="0" step="1" lastAgent="191" red="1" green="0" blue="0" />
+    <color firstAgent="192" step="1" lastAgent="383" red="0" green="1" blue="0" />
+  </AgentColorList>
+</ConfigData>

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ConfigData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <env_filesPath>./Scenarios/ExampleFollow/</env_filesPath>
+  <env_obstFile>./Scenarios/Decor/obstExampleFollow2.xml</env_obstFile>
+  <env_stageInfos stageName="">
+    <file />
+    <position x="0" y="0" z="0" />
+    <rotation x="0" y="0" z="0" />
+  </env_stageInfos>
+  <cam>
+    <cameraType typeID="1" />
+    <position x="-32.01872" y="-1.759027" z="3.32442" />
+    <rotation x="30.5008" y="3.963564E-06" z="88.99989" />
+    <lookAtAgent agentID="2" />
+    <followAgent agentID="2" followOnX="true" followOnY="true" lockFirstPerson="false" smoothFirstPerson="true" />
+    <CamResolution x="-1" y="-1" />
+  </cam>
+  <recording start="1" end="10" framerate="15" width="320" height="240">
+    <saveImgOriginal record="true" quality="8" width="-1" height="-1" />
+    <saveImgSegmentation record="false" quality="8" width="-1" height="-1" />
+    <saveImgCategories record="false" quality="8" width="-1" height="-1" />
+    <saveImgDepth record="false" quality="8" width="-1" height="-1" minDepth="0" maxDepth="50" exponent="1" />
+    <saveImgNormals record="false" quality="8" width="-1" height="-1" />
+    <saveImgOpticalFlow record="false" quality="8" width="-1" height="-1" motionVector="false" />
+    <saveBodyBoundingBoxes record="false" />
+    <saveHeadBoundingBoxes record="false" />
+    <saveDir>./Output/Follow/</saveDir>
+  </recording>
+  <AgentColorList />
+</ConfigData>

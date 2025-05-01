@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XMLObstacles xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Rectangles>
+    <Rectangle Width="0.2">
+      <A X="-50" Y="-3" />
+      <B X="50" Y="-3" />
+    </Rectangle>
+    <Rectangle Width="0.2">
+      <A X="-50" Y="3" />
+      <B X="50" Y="3" />
+    </Rectangle>
+  </Rectangles>
+</XMLObstacles>

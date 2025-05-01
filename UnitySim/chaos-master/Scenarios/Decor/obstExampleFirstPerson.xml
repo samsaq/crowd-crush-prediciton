@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XMLObstacles xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Cylinders>
+    <Cylinder Radius="1">
+      <Center X="2.5" Y="0" />
+    </Cylinder>
+    <Cylinder Radius="1">
+      <Center X="2.5" Y="-4.1667" />
+    </Cylinder>
+    <Cylinder Radius="1">
+      <Center X="-16.333" Y="-1.6667" />
+    </Cylinder>
+    <Cylinder Radius="1">
+      <Center X="-38.667" Y="0" />
+    </Cylinder>
+    <Cylinder Radius="1">
+      <Center X="-42.667" Y="-4.1667" />
+    </Cylinder>
+    <Cylinder Radius="1">
+      <Center X="-46.333" Y="-1.8333" />
+    </Cylinder>
+    <Cylinder Radius="1">
+      <Center X="-48.167" Y="-5.5" />
+    </Cylinder>
+    <Cylinder Radius="1">
+      <Center X="-51.333" Y="-2.8333" />
+    </Cylinder>
+  </Cylinders>
+</XMLObstacles>
