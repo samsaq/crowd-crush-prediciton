@@ -1,58 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Experiment>
+<Simulation delta_time="0.05" end_time="180.0">
   <Description>Choke Point - Flow through narrow passage causing high density</Description>
   
-  <World>
-    <Objects>
+  <World type="Infinite">
+    <Obstacles>
       <!-- Outer boundaries -->
-      <Object name="wall_top" type="Rectangle" x="-5" y="10" width="40" height="1" />
-      <Object name="wall_bottom" type="Rectangle" x="-5" y="-10" width="40" height="1" />
-      <Object name="wall_left" type="Rectangle" x="-5" y="0" width="1" height="20" />
-      <Object name="wall_right" type="Rectangle" x="35" y="0" width="1" height="20" />
+      <Obstacle>
+        <Point x="-5" y="10"/>
+        <Point x="35" y="10"/>
+        <Point x="35" y="9"/>
+        <Point x="-5" y="9"/>
+      </Obstacle>
+      <Obstacle>
+        <Point x="-5" y="-9"/>
+        <Point x="35" y="-9"/>
+        <Point x="35" y="-10"/>
+        <Point x="-5" y="-10"/>
+      </Obstacle>
+      <Obstacle>
+        <Point x="-5" y="9"/>
+        <Point x="-4" y="9"/>
+        <Point x="-4" y="-9"/>
+        <Point x="-5" y="-9"/>
+      </Obstacle>
+      <Obstacle>
+        <Point x="34" y="9"/>
+        <Point x="35" y="9"/>
+        <Point x="35" y="-9"/>
+        <Point x="34" y="-9"/>
+      </Obstacle>
       
       <!-- Choke point walls -->
-      <Object name="choke_top" type="Rectangle" x="10" y="5" width="10" height="1" />
-      <Object name="choke_bottom" type="Rectangle" x="10" y="-5" width="10" height="1" />
-    </Objects>
+      <Obstacle>
+        <Point x="10" y="5"/>
+        <Point x="20" y="5"/>
+        <Point x="20" y="4"/>
+        <Point x="10" y="4"/>
+      </Obstacle>
+      <Obstacle>
+        <Point x="10" y="-4"/>
+        <Point x="20" y="-4"/>
+        <Point x="20" y="-5"/>
+        <Point x="10" y="-5"/>
+      </Obstacle>
+    </Obstacles>
   </World>
   
-  <PolicyMakers>
-    <PolicyMaker name="PM-waiting-area" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.4" /> <!-- Average human walking speed -->
-        <Parameter name="goal_point" value="30,0" /> <!-- Target point on the other side of the choke point -->
-      </Parameters>
-    </PolicyMaker>
-  </PolicyMakers>
+  <Policies>
+    <Policy id="0" OptimizationMethod="global" RelaxationTime="0.5">
+      <costfunction range="5" name="ORCA" timeHorizon="2.0"/>
+    </Policy>
+  </Policies>
   
   <Agents>
     <!-- Create a large crowd of 200 agents in the waiting area -->
-    <Generator type="GridGenerator">
+    <Agent id="0" rad="0.25" pref_speed="1.4" max_speed="1.8">
+      <pos x="0" y="0"/>
+      <goal x="30" y="0"/>
+      <Policy id="0"/>
+    </Agent>
+    <!-- Use a generator to create multiple copies -->
+    <Generator type="Grid">
       <Parameters>
-        <Parameter name="policy_maker" value="PM-waiting-area" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="80" />
-        <Parameter name="row_count" value="10" />
-        <Parameter name="col_count" value="20" />
-        <Parameter name="row_gap" value="0.7" />
-        <Parameter name="col_gap" value="0.7" />
-        <Parameter name="pos_x" value="0" />
-        <Parameter name="pos_y" value="0" />
-        <Parameter name="noise" value="0.1" />
+        <Parameter name="agent_template" value="0"/>
+        <Parameter name="rows" value="10"/>
+        <Parameter name="cols" value="20"/>
+        <Parameter name="row_gap" value="0.7"/>
+        <Parameter name="col_gap" value="0.7"/>
+        <Parameter name="center_x" value="0"/>
+        <Parameter name="center_y" value="0"/>
+        <Parameter name="noise" value="0.1"/>
       </Parameters>
     </Generator>
   </Agents>
-  
-  <AgentInteraction>
-    <Algorithm type="ORCA">
-      <Parameters>
-        <Parameter name="tau" value="2.0" />
-        <Parameter name="default_policy" value="PM-waiting-area" />
-      </Parameters>
-    </Algorithm>
-  </AgentInteraction>
-  
-  <Duration value="180.0" /> <!-- 3 minutes of simulation -->
-  <TimeStep value="0.05" />
-  <OutputData folder="output_data" />
-</Experiment> 
+</Simulation> 

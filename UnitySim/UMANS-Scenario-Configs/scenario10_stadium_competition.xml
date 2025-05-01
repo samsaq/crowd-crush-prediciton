@@ -1,211 +1,307 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Experiment>
+<Simulation delta_time="0.05" end_time="300.0">
   <Description>Stadium Competition - Competing flows of different fan groups</Description>
   
-  <World>
-    <Objects>
+  <World type="Infinite">
+    <Obstacles>
       <!-- Stadium outer walls -->
-      <Object name="outer_wall_top" type="Rectangle" x="0" y="50" width="100" height="1" />
-      <Object name="outer_wall_bottom" type="Rectangle" x="0" y="-50" width="100" height="1" />
-      <Object name="outer_wall_left" type="Rectangle" x="-50" y="0" width="1" height="100" />
-      <Object name="outer_wall_right" type="Rectangle" x="50" y="0" width="1" height="100" />
+      <!-- Top wall -->
+      <Obstacle>
+        <Point x="-50" y="50"/>
+        <Point x="50" y="50"/>
+        <Point x="50" y="49"/>
+        <Point x="-50" y="49"/>
+      </Obstacle>
+      
+      <!-- Bottom wall -->
+      <Obstacle>
+        <Point x="-50" y="-49"/>
+        <Point x="50" y="-49"/>
+        <Point x="50" y="-50"/>
+        <Point x="-50" y="-50"/>
+      </Obstacle>
+      
+      <!-- Left wall -->
+      <Obstacle>
+        <Point x="-50" y="50"/>
+        <Point x="-49" y="50"/>
+        <Point x="-49" y="-50"/>
+        <Point x="-50" y="-50"/>
+      </Obstacle>
+      
+      <!-- Right wall -->
+      <Obstacle>
+        <Point x="49" y="50"/>
+        <Point x="50" y="50"/>
+        <Point x="50" y="-50"/>
+        <Point x="49" y="-50"/>
+      </Obstacle>
       
       <!-- Field/court boundary - center of stadium -->
-      <Object name="field_top" type="Rectangle" x="0" y="20" width="40" height="1" />
-      <Object name="field_bottom" type="Rectangle" x="0" y="-20" width="40" height="1" />
-      <Object name="field_left" type="Rectangle" x="-20" y="0" width="1" height="40" />
-      <Object name="field_right" type="Rectangle" x="20" y="0" width="1" height="40" />
+      <!-- Top field boundary -->
+      <Obstacle>
+        <Point x="-20" y="20"/>
+        <Point x="20" y="20"/>
+        <Point x="20" y="19"/>
+        <Point x="-20" y="19"/>
+      </Obstacle>
       
-      <!-- Entrance/exit gates -->
-      <Object name="gate_north_left" type="Rectangle" x="-30" y="50" width="30" height="1" />
-      <Object name="gate_north_right" type="Rectangle" x="30" y="50" width="30" height="1" />
-      <Object name="gate_south_left" type="Rectangle" x="-30" y="-50" width="30" height="1" />
-      <Object name="gate_south_right" type="Rectangle" x="30" y="-50" width="30" height="1" />
-      <Object name="gate_east_top" type="Rectangle" x="50" y="30" width="1" height="30" />
-      <Object name="gate_east_bottom" type="Rectangle" x="50" y="-30" width="1" height="30" />
-      <Object name="gate_west_top" type="Rectangle" x="-50" y="30" width="1" height="30" />
-      <Object name="gate_west_bottom" type="Rectangle" x="-50" y="-30" width="1" height="30" />
+      <!-- Bottom field boundary -->
+      <Obstacle>
+        <Point x="-20" y="-19"/>
+        <Point x="20" y="-19"/>
+        <Point x="20" y="-20"/>
+        <Point x="-20" y="-20"/>
+      </Obstacle>
+      
+      <!-- Left field boundary -->
+      <Obstacle>
+        <Point x="-20" y="20"/>
+        <Point x="-19" y="20"/>
+        <Point x="-19" y="-20"/>
+        <Point x="-20" y="-20"/>
+      </Obstacle>
+      
+      <!-- Right field boundary -->
+      <Obstacle>
+        <Point x="19" y="20"/>
+        <Point x="20" y="20"/>
+        <Point x="20" y="-20"/>
+        <Point x="19" y="-20"/>
+      </Obstacle>
+      
+      <!-- Entrance/exit gates (gaps in walls) -->
+      <!-- North gate left -->
+      <Obstacle>
+        <Point x="-50" y="50"/>
+        <Point x="-30" y="50"/>
+        <Point x="-30" y="49"/>
+        <Point x="-50" y="49"/>
+      </Obstacle>
+      
+      <!-- North gate right -->
+      <Obstacle>
+        <Point x="0" y="50"/>
+        <Point x="50" y="50"/>
+        <Point x="50" y="49"/>
+        <Point x="0" y="49"/>
+      </Obstacle>
+      
+      <!-- South gate left -->
+      <Obstacle>
+        <Point x="-50" y="-49"/>
+        <Point x="-30" y="-49"/>
+        <Point x="-30" y="-50"/>
+        <Point x="-50" y="-50"/>
+      </Obstacle>
+      
+      <!-- South gate right -->
+      <Obstacle>
+        <Point x="0" y="-49"/>
+        <Point x="50" y="-49"/>
+        <Point x="50" y="-50"/>
+        <Point x="0" y="-50"/>
+      </Obstacle>
+      
+      <!-- East gate top -->
+      <Obstacle>
+        <Point x="49" y="50"/>
+        <Point x="50" y="50"/>
+        <Point x="50" y="30"/>
+        <Point x="49" y="30"/>
+      </Obstacle>
+      
+      <!-- East gate bottom -->
+      <Obstacle>
+        <Point x="49" y="0"/>
+        <Point x="50" y="0"/>
+        <Point x="50" y="-50"/>
+        <Point x="49" y="-50"/>
+      </Obstacle>
+      
+      <!-- West gate top -->
+      <Obstacle>
+        <Point x="-50" y="50"/>
+        <Point x="-49" y="50"/>
+        <Point x="-49" y="30"/>
+        <Point x="-50" y="30"/>
+      </Obstacle>
+      
+      <!-- West gate bottom -->
+      <Obstacle>
+        <Point x="-50" y="0"/>
+        <Point x="-49" y="0"/>
+        <Point x="-49" y="-50"/>
+        <Point x="-50" y="-50"/>
+      </Obstacle>
       
       <!-- Barriers dividing fan sections -->
-      <Object name="barrier_north" type="Rectangle" x="0" y="35" width="1" height="15" />
-      <Object name="barrier_south" type="Rectangle" x="0" y="-35" width="1" height="15" />
-      <Object name="barrier_east" type="Rectangle" x="35" y="0" width="15" height="1" />
-      <Object name="barrier_west" type="Rectangle" x="-35" y="0" width="15" height="1" />
-    </Objects>
+      <!-- North barrier -->
+      <Obstacle>
+        <Point x="-0.5" y="43"/>
+        <Point x="0.5" y="43"/>
+        <Point x="0.5" y="28"/>
+        <Point x="-0.5" y="28"/>
+      </Obstacle>
+      
+      <!-- South barrier -->
+      <Obstacle>
+        <Point x="-0.5" y="-28"/>
+        <Point x="0.5" y="-28"/>
+        <Point x="0.5" y="-43"/>
+        <Point x="-0.5" y="-43"/>
+      </Obstacle>
+      
+      <!-- East barrier -->
+      <Obstacle>
+        <Point x="28" y="0.5"/>
+        <Point x="43" y="0.5"/>
+        <Point x="43" y="-0.5"/>
+        <Point x="28" y="-0.5"/>
+      </Obstacle>
+      
+      <!-- West barrier -->
+      <Obstacle>
+        <Point x="-43" y="0.5"/>
+        <Point x="-28" y="0.5"/>
+        <Point x="-28" y="-0.5"/>
+        <Point x="-43" y="-0.5"/>
+      </Obstacle>
+    </Obstacles>
   </World>
   
-  <PolicyMakers>
-    <!-- Team A fan policies -->
-    <PolicyMaker name="PM-teamA-section" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.2" />
-        <Parameter name="goal_point" value="-30,30" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-teamA-exit" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.4" />
-        <Parameter name="goal_point" value="-55,0" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <!-- Team B fan policies -->
-    <PolicyMaker name="PM-teamB-section" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.2" />
-        <Parameter name="goal_point" value="30,30" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-teamB-exit" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.4" />
-        <Parameter name="goal_point" value="55,0" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <!-- Team C fan policies -->
-    <PolicyMaker name="PM-teamC-section" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.2" />
-        <Parameter name="goal_point" value="30,-30" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-teamC-exit" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.4" />
-        <Parameter name="goal_point" value="0,-55" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <!-- Team D fan policies -->
-    <PolicyMaker name="PM-teamD-section" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.2" />
-        <Parameter name="goal_point" value="-30,-30" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-teamD-exit" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.4" />
-        <Parameter name="goal_point" value="0,55" />
-      </Parameters>
-    </PolicyMaker>
-  </PolicyMakers>
+  <Policies>
+    <Policy id="0" OptimizationMethod="global" RelaxationTime="0.6">
+      <costfunction range="10" name="ORCA" timeHorizon="1.5"/>
+    </Policy>
+  </Policies>
   
   <Agents>
+    <!-- Template agents for different teams and goals -->
+    <!-- Team A fans at seats heading to exit -->
+    <Agent id="0" rad="0.25" pref_speed="1.4" max_speed="1.8">
+      <pos x="-35" y="35"/>
+      <goal x="-55" y="0"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- Team B fans at seats heading to exit -->
+    <Agent id="1" rad="0.25" pref_speed="1.4" max_speed="1.8">
+      <pos x="35" y="35"/>
+      <goal x="55" y="0"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- Team C fans at seats heading to exit -->
+    <Agent id="2" rad="0.25" pref_speed="1.4" max_speed="1.8">
+      <pos x="35" y="-35"/>
+      <goal x="0" y="-55"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- Team D fans at seats heading to exit -->
+    <Agent id="3" rad="0.25" pref_speed="1.4" max_speed="1.8">
+      <pos x="-35" y="-35"/>
+      <goal x="0" y="55"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- Team A fans arriving late -->
+    <Agent id="4" rad="0.25" pref_speed="1.2" max_speed="1.6">
+      <pos x="-45" y="0"/>
+      <goal x="-30" y="30"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- Team B fans arriving late -->
+    <Agent id="5" rad="0.25" pref_speed="1.2" max_speed="1.6">
+      <pos x="45" y="0"/>
+      <goal x="30" y="30"/>
+      <Policy id="0"/>
+    </Agent>
+    
     <!-- Team A fans in their section -->
-    <Generator type="GridGenerator">
+    <Generator type="Grid">
       <Parameters>
-        <Parameter name="policy_maker" value="PM-teamA-exit" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="row_count" value="10" />
-        <Parameter name="col_count" value="10" />
-        <Parameter name="row_gap" value="0.8" />
-        <Parameter name="col_gap" value="0.8" />
-        <Parameter name="pos_x" value="-35" />
-        <Parameter name="pos_y" value="35" />
-        <Parameter name="noise" value="0.2" />
+        <Parameter name="agent_template" value="0"/>
+        <Parameter name="rows" value="10"/>
+        <Parameter name="cols" value="10"/>
+        <Parameter name="row_gap" value="0.8"/>
+        <Parameter name="col_gap" value="0.8"/>
+        <Parameter name="center_x" value="-35"/>
+        <Parameter name="center_y" value="35"/>
+        <Parameter name="noise" value="0.2"/>
       </Parameters>
     </Generator>
     
     <!-- Team B fans in their section -->
-    <Generator type="GridGenerator">
+    <Generator type="Grid">
       <Parameters>
-        <Parameter name="policy_maker" value="PM-teamB-exit" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="row_count" value="10" />
-        <Parameter name="col_count" value="10" />
-        <Parameter name="row_gap" value="0.8" />
-        <Parameter name="col_gap" value="0.8" />
-        <Parameter name="pos_x" value="35" />
-        <Parameter name="pos_y" value="35" />
-        <Parameter name="noise" value="0.2" />
+        <Parameter name="agent_template" value="1"/>
+        <Parameter name="rows" value="10"/>
+        <Parameter name="cols" value="10"/>
+        <Parameter name="row_gap" value="0.8"/>
+        <Parameter name="col_gap" value="0.8"/>
+        <Parameter name="center_x" value="35"/>
+        <Parameter name="center_y" value="35"/>
+        <Parameter name="noise" value="0.2"/>
       </Parameters>
     </Generator>
     
     <!-- Team C fans in their section -->
-    <Generator type="GridGenerator">
+    <Generator type="Grid">
       <Parameters>
-        <Parameter name="policy_maker" value="PM-teamC-exit" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="row_count" value="10" />
-        <Parameter name="col_count" value="10" />
-        <Parameter name="row_gap" value="0.8" />
-        <Parameter name="col_gap" value="0.8" />
-        <Parameter name="pos_x" value="35" />
-        <Parameter name="pos_y" value="-35" />
-        <Parameter name="noise" value="0.2" />
+        <Parameter name="agent_template" value="2"/>
+        <Parameter name="rows" value="10"/>
+        <Parameter name="cols" value="10"/>
+        <Parameter name="row_gap" value="0.8"/>
+        <Parameter name="col_gap" value="0.8"/>
+        <Parameter name="center_x" value="35"/>
+        <Parameter name="center_y" value="-35"/>
+        <Parameter name="noise" value="0.2"/>
       </Parameters>
     </Generator>
     
     <!-- Team D fans in their section -->
-    <Generator type="GridGenerator">
+    <Generator type="Grid">
       <Parameters>
-        <Parameter name="policy_maker" value="PM-teamD-exit" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="row_count" value="10" />
-        <Parameter name="col_count" value="10" />
-        <Parameter name="row_gap" value="0.8" />
-        <Parameter name="col_gap" value="0.8" />
-        <Parameter name="pos_x" value="-35" />
-        <Parameter name="pos_y" value="-35" />
-        <Parameter name="noise" value="0.2" />
+        <Parameter name="agent_template" value="3"/>
+        <Parameter name="rows" value="10"/>
+        <Parameter name="cols" value="10"/>
+        <Parameter name="row_gap" value="0.8"/>
+        <Parameter name="col_gap" value="0.8"/>
+        <Parameter name="center_x" value="-35"/>
+        <Parameter name="center_y" value="-35"/>
+        <Parameter name="noise" value="0.2"/>
       </Parameters>
     </Generator>
     
     <!-- Team A fans arriving late -->
-    <Generator type="GridGenerator">
+    <Generator type="Grid">
       <Parameters>
-        <Parameter name="policy_maker" value="PM-teamA-section" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="row_count" value="5" />
-        <Parameter name="col_count" value="10" />
-        <Parameter name="row_gap" value="0.8" />
-        <Parameter name="col_gap" value="0.8" />
-        <Parameter name="pos_x" value="-45" />
-        <Parameter name="pos_y" value="0" />
-        <Parameter name="noise" value="0.2" />
+        <Parameter name="agent_template" value="4"/>
+        <Parameter name="rows" value="5"/>
+        <Parameter name="cols" value="10"/>
+        <Parameter name="row_gap" value="0.8"/>
+        <Parameter name="col_gap" value="0.8"/>
+        <Parameter name="center_x" value="-45"/>
+        <Parameter name="center_y" value="0"/>
+        <Parameter name="noise" value="0.2"/>
       </Parameters>
     </Generator>
     
     <!-- Team B fans arriving late -->
-    <Generator type="GridGenerator">
+    <Generator type="Grid">
       <Parameters>
-        <Parameter name="policy_maker" value="PM-teamB-section" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="row_count" value="5" />
-        <Parameter name="col_count" value="10" />
-        <Parameter name="row_gap" value="0.8" />
-        <Parameter name="col_gap" value="0.8" />
-        <Parameter name="pos_x" value="45" />
-        <Parameter name="pos_y" value="0" />
-        <Parameter name="noise" value="0.2" />
+        <Parameter name="agent_template" value="5"/>
+        <Parameter name="rows" value="5"/>
+        <Parameter name="cols" value="10"/>
+        <Parameter name="row_gap" value="0.8"/>
+        <Parameter name="col_gap" value="0.8"/>
+        <Parameter name="center_x" value="45"/>
+        <Parameter name="center_y" value="0"/>
+        <Parameter name="noise" value="0.2"/>
       </Parameters>
     </Generator>
   </Agents>
-  
-  <AgentInteraction>
-    <Algorithm type="ORCA">
-      <Parameters>
-        <Parameter name="tau" value="0.6" /> <!-- Lower value to model more aggressive interactions -->
-        <Parameter name="neighbor_dist" value="10.0" />
-        <Parameter name="time_horizon" value="1.5" />
-        <Parameter name="time_horizon_obst" value="1.0" />
-      </Parameters>
-    </Algorithm>
-  </AgentInteraction>
-  
-  <Duration value="300.0" /> <!-- 5 minutes of simulation -->
-  <TimeStep value="0.05" />
-  <OutputData folder="output_data" />
-</Experiment> 
+</Simulation> 

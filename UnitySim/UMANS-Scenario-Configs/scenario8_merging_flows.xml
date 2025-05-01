@@ -1,121 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Experiment>
+<Simulation delta_time="0.05" end_time="240.0">
   <Description>T-Junction Merging - Dense crowd flows merging at a 90-degree angle</Description>
   
-  <World>
-    <Objects>
+  <World type="Infinite">
+    <Obstacles>
       <!-- T-junction structure -->
-      <!-- Main horizontal corridor -->
-      <Object name="north_wall_left" type="Rectangle" x="-25" y="5" width="25" height="1" />
-      <Object name="north_wall_right" type="Rectangle" x="25" y="5" width="25" height="1" />
-      <Object name="south_wall_left" type="Rectangle" x="-25" y="-5" width="25" height="1" />
-      <Object name="south_wall_right" type="Rectangle" x="25" y="-5" width="25" height="1" />
+      <!-- Main horizontal corridor - north wall left -->
+      <Obstacle>
+        <Point x="-50" y="5"/>
+        <Point x="-25" y="5"/>
+        <Point x="-25" y="4"/>
+        <Point x="-50" y="4"/>
+      </Obstacle>
       
-      <!-- Vertical corridor -->
-      <Object name="west_wall_bottom" type="Rectangle" x="-5" y="-25" width="1" height="20" />
-      <Object name="east_wall_bottom" type="Rectangle" x="5" y="-25" width="1" height="20" />
-    </Objects>
+      <!-- Main horizontal corridor - north wall right -->
+      <Obstacle>
+        <Point x="25" y="5"/>
+        <Point x="50" y="5"/>
+        <Point x="50" y="4"/>
+        <Point x="25" y="4"/>
+      </Obstacle>
+      
+      <!-- Main horizontal corridor - south wall left -->
+      <Obstacle>
+        <Point x="-50" y="-4"/>
+        <Point x="-25" y="-4"/>
+        <Point x="-25" y="-5"/>
+        <Point x="-50" y="-5"/>
+      </Obstacle>
+      
+      <!-- Main horizontal corridor - south wall right -->
+      <Obstacle>
+        <Point x="25" y="-4"/>
+        <Point x="50" y="-4"/>
+        <Point x="50" y="-5"/>
+        <Point x="25" y="-5"/>
+      </Obstacle>
+      
+      <!-- Vertical corridor - west wall -->
+      <Obstacle>
+        <Point x="-5" y="-5"/>
+        <Point x="-4" y="-5"/>
+        <Point x="-4" y="-45"/>
+        <Point x="-5" y="-45"/>
+      </Obstacle>
+      
+      <!-- Vertical corridor - east wall -->
+      <Obstacle>
+        <Point x="4" y="-5"/>
+        <Point x="5" y="-5"/>
+        <Point x="5" y="-45"/>
+        <Point x="4" y="-45"/>
+      </Obstacle>
+    </Obstacles>
   </World>
   
-  <PolicyMakers>
-    <PolicyMaker name="PM-west-to-east" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.4" />
-        <Parameter name="goal_point" value="50,0" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-east-to-west" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.4" />
-        <Parameter name="goal_point" value="-50,0" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-south-to-north" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.4" />
-        <Parameter name="goal_point" value="0,0" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-south-to-east" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.4" />
-        <Parameter name="goal_point" value="50,0" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-south-to-west" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.4" />
-        <Parameter name="goal_point" value="-50,0" />
-      </Parameters>
-    </PolicyMaker>
-  </PolicyMakers>
+  <Policies>
+    <Policy id="0" OptimizationMethod="global" RelaxationTime="0.8">
+      <costfunction range="7" name="ORCA" timeHorizon="2.0"/>
+    </Policy>
+  </Policies>
   
   <Agents>
+    <!-- Template agents for different directions -->
+    <!-- West to East -->
+    <Agent id="0" rad="0.25" pref_speed="1.4" max_speed="1.8">
+      <pos x="-40" y="0"/>
+      <goal x="50" y="0"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- East to West -->
+    <Agent id="1" rad="0.25" pref_speed="1.4" max_speed="1.8">
+      <pos x="40" y="0"/>
+      <goal x="-50" y="0"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- South to East -->
+    <Agent id="2" rad="0.25" pref_speed="1.4" max_speed="1.8">
+      <pos x="0" y="-40"/>
+      <goal x="50" y="0"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- South to West -->
+    <Agent id="3" rad="0.25" pref_speed="1.4" max_speed="1.8">
+      <pos x="0" y="-40"/>
+      <goal x="-50" y="0"/>
+      <Policy id="0"/>
+    </Agent>
+    
     <!-- West to East flow -->
-    <Generator type="GridGenerator">
+    <Generator type="Grid">
       <Parameters>
-        <Parameter name="policy_maker" value="PM-west-to-east" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="row_count" value="5" />
-        <Parameter name="col_count" value="15" />
-        <Parameter name="row_gap" value="1.0" />
-        <Parameter name="col_gap" value="1.0" />
-        <Parameter name="pos_x" value="-40" />
-        <Parameter name="pos_y" value="0" />
-        <Parameter name="noise" value="0.2" />
+        <Parameter name="agent_template" value="0"/>
+        <Parameter name="rows" value="5"/>
+        <Parameter name="cols" value="15"/>
+        <Parameter name="row_gap" value="1.0"/>
+        <Parameter name="col_gap" value="1.0"/>
+        <Parameter name="center_x" value="-40"/>
+        <Parameter name="center_y" value="0"/>
+        <Parameter name="noise" value="0.2"/>
       </Parameters>
     </Generator>
     
     <!-- East to West flow -->
-    <Generator type="GridGenerator">
+    <Generator type="Grid">
       <Parameters>
-        <Parameter name="policy_maker" value="PM-east-to-west" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="row_count" value="5" />
-        <Parameter name="col_count" value="10" />
-        <Parameter name="row_gap" value="1.0" />
-        <Parameter name="col_gap" value="1.0" />
-        <Parameter name="pos_x" value="40" />
-        <Parameter name="pos_y" value="0" />
-        <Parameter name="noise" value="0.2" />
+        <Parameter name="agent_template" value="1"/>
+        <Parameter name="rows" value="5"/>
+        <Parameter name="cols" value="10"/>
+        <Parameter name="row_gap" value="1.0"/>
+        <Parameter name="col_gap" value="1.0"/>
+        <Parameter name="center_x" value="40"/>
+        <Parameter name="center_y" value="0"/>
+        <Parameter name="noise" value="0.2"/>
       </Parameters>
     </Generator>
     
-    <!-- South to North/East/West mixed flow -->
-    <Generator type="GridGenerator">
+    <!-- South to East flow -->
+    <Generator type="Grid">
       <Parameters>
-        <Parameter name="policy_maker_distribution" value="PM-south-to-east=0.5;PM-south-to-west=0.5" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="row_count" value="15" />
-        <Parameter name="col_count" value="5" />
-        <Parameter name="row_gap" value="1.0" />
-        <Parameter name="col_gap" value="1.0" />
-        <Parameter name="pos_x" value="0" />
-        <Parameter name="pos_y" value="-40" />
-        <Parameter name="noise" value="0.2" />
+        <Parameter name="agent_template" value="2"/>
+        <Parameter name="rows" value="15"/>
+        <Parameter name="cols" value="2"/>
+        <Parameter name="row_gap" value="1.0"/>
+        <Parameter name="col_gap" value="1.0"/>
+        <Parameter name="center_x" value="-1"/>
+        <Parameter name="center_y" value="-40"/>
+        <Parameter name="noise" value="0.2"/>
+      </Parameters>
+    </Generator>
+    
+    <!-- South to West flow -->
+    <Generator type="Grid">
+      <Parameters>
+        <Parameter name="agent_template" value="3"/>
+        <Parameter name="rows" value="15"/>
+        <Parameter name="cols" value="3"/>
+        <Parameter name="row_gap" value="1.0"/>
+        <Parameter name="col_gap" value="1.0"/>
+        <Parameter name="center_x" value="1"/>
+        <Parameter name="center_y" value="-40"/>
+        <Parameter name="noise" value="0.2"/>
       </Parameters>
     </Generator>
   </Agents>
-  
-  <AgentInteraction>
-    <Algorithm type="ORCA">
-      <Parameters>
-        <Parameter name="tau" value="0.8" />
-        <Parameter name="neighbor_dist" value="7.0" />
-        <Parameter name="time_horizon" value="2.0" />
-        <Parameter name="time_horizon_obst" value="1.0" />
-      </Parameters>
-    </Algorithm>
-  </AgentInteraction>
-  
-  <Duration value="240.0" /> <!-- 4 minutes of simulation -->
-  <TimeStep value="0.05" />
-  <OutputData folder="output_data" />
-</Experiment> 
+</Simulation> 

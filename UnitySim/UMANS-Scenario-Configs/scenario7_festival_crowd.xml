@@ -1,149 +1,317 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Experiment>
+<Simulation delta_time="0.05" end_time="600.0">
   <Description>Festival Crowd - Multiple attractions with changing crowd flows</Description>
   
-  <World>
-    <Objects>
+  <World type="Infinite">
+    <Obstacles>
       <!-- Festival boundary walls -->
-      <Object name="boundary_top" type="Rectangle" x="0" y="40" width="80" height="1" />
-      <Object name="boundary_bottom" type="Rectangle" x="0" y="-40" width="80" height="1" />
-      <Object name="boundary_left" type="Rectangle" x="-40" y="0" width="1" height="80" />
-      <Object name="boundary_right" type="Rectangle" x="40" y="0" width="1" height="80" />
+      <!-- Top boundary -->
+      <Obstacle>
+        <Point x="-40" y="40"/>
+        <Point x="40" y="40"/>
+        <Point x="40" y="39"/>
+        <Point x="-40" y="39"/>
+      </Obstacle>
+      
+      <!-- Bottom boundary -->
+      <Obstacle>
+        <Point x="-40" y="-39"/>
+        <Point x="40" y="-39"/>
+        <Point x="40" y="-40"/>
+        <Point x="-40" y="-40"/>
+      </Obstacle>
+      
+      <!-- Left boundary -->
+      <Obstacle>
+        <Point x="-40" y="39"/>
+        <Point x="-39" y="39"/>
+        <Point x="-39" y="-39"/>
+        <Point x="-40" y="-39"/>
+      </Obstacle>
+      
+      <!-- Right boundary -->
+      <Obstacle>
+        <Point x="39" y="39"/>
+        <Point x="40" y="39"/>
+        <Point x="40" y="-39"/>
+        <Point x="39" y="-39"/>
+      </Obstacle>
       
       <!-- Stage areas -->
-      <Object name="main_stage" type="Rectangle" x="0" y="30" width="30" height="10" />
-      <Object name="secondary_stage1" type="Rectangle" x="-30" y="-20" width="15" height="8" />
-      <Object name="secondary_stage2" type="Rectangle" x="30" y="-20" width="15" height="8" />
+      <!-- Main stage -->
+      <Obstacle>
+        <Point x="-15" y="35"/>
+        <Point x="15" y="35"/>
+        <Point x="15" y="25"/>
+        <Point x="-15" y="25"/>
+      </Obstacle>
+      
+      <!-- Secondary stage 1 -->
+      <Obstacle>
+        <Point x="-37.5" y="-16"/>
+        <Point x="-22.5" y="-16"/>
+        <Point x="-22.5" y="-24"/>
+        <Point x="-37.5" y="-24"/>
+      </Obstacle>
+      
+      <!-- Secondary stage 2 -->
+      <Obstacle>
+        <Point x="22.5" y="-16"/>
+        <Point x="37.5" y="-16"/>
+        <Point x="37.5" y="-24"/>
+        <Point x="22.5" y="-24"/>
+      </Obstacle>
       
       <!-- Food/vendor areas -->
-      <Object name="food_area1" type="Rectangle" x="-30" y="15" width="10" height="5" />
-      <Object name="food_area2" type="Rectangle" x="30" y="15" width="10" height="5" />
-      <Object name="food_area3" type="Rectangle" x="0" y="-30" width="15" height="5" />
+      <!-- Food area 1 -->
+      <Obstacle>
+        <Point x="-35" y="17.5"/>
+        <Point x="-25" y="17.5"/>
+        <Point x="-25" y="12.5"/>
+        <Point x="-35" y="12.5"/>
+      </Obstacle>
+      
+      <!-- Food area 2 -->
+      <Obstacle>
+        <Point x="25" y="17.5"/>
+        <Point x="35" y="17.5"/>
+        <Point x="35" y="12.5"/>
+        <Point x="25" y="12.5"/>
+      </Obstacle>
+      
+      <!-- Food area 3 -->
+      <Obstacle>
+        <Point x="-7.5" y="-27.5"/>
+        <Point x="7.5" y="-27.5"/>
+        <Point x="7.5" y="-32.5"/>
+        <Point x="-7.5" y="-32.5"/>
+      </Obstacle>
       
       <!-- Toilets/services -->
-      <Object name="services1" type="Rectangle" x="-25" y="-5" width="5" height="5" />
-      <Object name="services2" type="Rectangle" x="25" y="-5" width="5" height="5" />
-    </Objects>
+      <!-- Services 1 -->
+      <Obstacle>
+        <Point x="-27.5" y="-2.5"/>
+        <Point x="-22.5" y="-2.5"/>
+        <Point x="-22.5" y="-7.5"/>
+        <Point x="-27.5" y="-7.5"/>
+      </Obstacle>
+      
+      <!-- Services 2 -->
+      <Obstacle>
+        <Point x="22.5" y="-2.5"/>
+        <Point x="27.5" y="-2.5"/>
+        <Point x="27.5" y="-7.5"/>
+        <Point x="22.5" y="-7.5"/>
+      </Obstacle>
+    </Obstacles>
   </World>
   
-  <PolicyMakers>
-    <!-- Main stage audience policy -->
-    <PolicyMaker name="PM-main-stage" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.0" />
-        <Parameter name="goal_point" value="0,25" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <!-- Secondary stages audience policies -->
-    <PolicyMaker name="PM-stage1" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.0" />
-        <Parameter name="goal_point" value="-30,-15" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-stage2" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.0" />
-        <Parameter name="goal_point" value="30,-15" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <!-- Food area policies -->
-    <PolicyMaker name="PM-food1" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.2" />
-        <Parameter name="goal_point" value="-30,12" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-food2" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.2" />
-        <Parameter name="goal_point" value="30,12" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-food3" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.2" />
-        <Parameter name="goal_point" value="0,-27" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <!-- Services policies -->
-    <PolicyMaker name="PM-services1" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.3" />
-        <Parameter name="goal_point" value="-25,-5" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-services2" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.3" />
-        <Parameter name="goal_point" value="25,-5" />
-      </Parameters>
-    </PolicyMaker>
-  </PolicyMakers>
+  <Policies>
+    <Policy id="0" OptimizationMethod="global" RelaxationTime="1.0">
+      <costfunction range="5" name="ORCA" timeHorizon="1.0"/>
+    </Policy>
+  </Policies>
   
   <Agents>
+    <!-- Template agents for different destinations -->
+    <!-- Main stage audience -->
+    <Agent id="0" rad="0.25" pref_speed="1.0" max_speed="1.5">
+      <pos x="0" y="0"/>
+      <goal x="0" y="25"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- Secondary stage 1 audience -->
+    <Agent id="1" rad="0.25" pref_speed="1.0" max_speed="1.5">
+      <pos x="0" y="0"/>
+      <goal x="-30" y="-15"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- Secondary stage 2 audience -->
+    <Agent id="2" rad="0.25" pref_speed="1.0" max_speed="1.5">
+      <pos x="0" y="0"/>
+      <goal x="30" y="-15"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- Food area 1 visitors -->
+    <Agent id="3" rad="0.25" pref_speed="1.2" max_speed="1.6">
+      <pos x="0" y="0"/>
+      <goal x="-30" y="12"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- Food area 2 visitors -->
+    <Agent id="4" rad="0.25" pref_speed="1.2" max_speed="1.6">
+      <pos x="0" y="0"/>
+      <goal x="30" y="12"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- Food area 3 visitors -->
+    <Agent id="5" rad="0.25" pref_speed="1.2" max_speed="1.6">
+      <pos x="0" y="0"/>
+      <goal x="0" y="-27"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- Services 1 visitors -->
+    <Agent id="6" rad="0.25" pref_speed="1.3" max_speed="1.7">
+      <pos x="0" y="0"/>
+      <goal x="-25" y="-5"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- Services 2 visitors -->
+    <Agent id="7" rad="0.25" pref_speed="1.3" max_speed="1.7">
+      <pos x="0" y="0"/>
+      <goal x="25" y="-5"/>
+      <Policy id="0"/>
+    </Agent>
+    
     <!-- Main stage area crowd -->
-    <Generator type="RandomGenerator">
+    <Generator type="Random">
       <Parameters>
-        <Parameter name="policy_maker_distribution" value="PM-main-stage=1.0" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="count" value="250" />
-        <Parameter name="position_region" value="Rectangle,-15,15,30,10" />
+        <Parameter name="agent_template" value="0"/>
+        <Parameter name="count" value="250"/>
+        <Parameter name="shape" value="rectangle"/>
+        <Parameter name="width" value="30"/>
+        <Parameter name="height" value="10"/>
+        <Parameter name="center_x" value="0"/>
+        <Parameter name="center_y" value="15"/>
       </Parameters>
     </Generator>
     
     <!-- Crowd near stage 1 -->
-    <Generator type="RandomGenerator">
+    <Generator type="Random">
       <Parameters>
-        <Parameter name="policy_maker_distribution" value="PM-stage1=1.0" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="count" value="80" />
-        <Parameter name="position_region" value="Rectangle,-35,-25,10,10" />
+        <Parameter name="agent_template" value="1"/>
+        <Parameter name="count" value="80"/>
+        <Parameter name="shape" value="rectangle"/>
+        <Parameter name="width" value="10"/>
+        <Parameter name="height" value="10"/>
+        <Parameter name="center_x" value="-35"/>
+        <Parameter name="center_y" value="-25"/>
       </Parameters>
     </Generator>
     
     <!-- Crowd near stage 2 -->
-    <Generator type="RandomGenerator">
+    <Generator type="Random">
       <Parameters>
-        <Parameter name="policy_maker_distribution" value="PM-stage2=1.0" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="count" value="80" />
-        <Parameter name="position_region" value="Rectangle,25,-25,10,10" />
+        <Parameter name="agent_template" value="2"/>
+        <Parameter name="count" value="80"/>
+        <Parameter name="shape" value="rectangle"/>
+        <Parameter name="width" value="10"/>
+        <Parameter name="height" value="10"/>
+        <Parameter name="center_x" value="25"/>
+        <Parameter name="center_y" value="-25"/>
       </Parameters>
     </Generator>
     
     <!-- Moving crowds between attractions -->
-    <Generator type="RandomGenerator">
+    <!-- Food area 1 visitors -->
+    <Generator type="Random">
       <Parameters>
-        <Parameter name="policy_maker_distribution" value="PM-food1=0.15;PM-food2=0.15;PM-food3=0.15;PM-services1=0.15;PM-services2=0.15;PM-main-stage=0.1;PM-stage1=0.075;PM-stage2=0.075" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="count" value="150" />
-        <Parameter name="position_region" value="Rectangle,-35,-35,70,70" />
+        <Parameter name="agent_template" value="3"/>
+        <Parameter name="count" value="23"/>
+        <Parameter name="shape" value="rectangle"/>
+        <Parameter name="width" value="70"/>
+        <Parameter name="height" value="70"/>
+        <Parameter name="center_x" value="0"/>
+        <Parameter name="center_y" value="0"/>
+      </Parameters>
+    </Generator>
+    
+    <!-- Food area 2 visitors -->
+    <Generator type="Random">
+      <Parameters>
+        <Parameter name="agent_template" value="4"/>
+        <Parameter name="count" value="23"/>
+        <Parameter name="shape" value="rectangle"/>
+        <Parameter name="width" value="70"/>
+        <Parameter name="height" value="70"/>
+        <Parameter name="center_x" value="0"/>
+        <Parameter name="center_y" value="0"/>
+      </Parameters>
+    </Generator>
+    
+    <!-- Food area 3 visitors -->
+    <Generator type="Random">
+      <Parameters>
+        <Parameter name="agent_template" value="5"/>
+        <Parameter name="count" value="23"/>
+        <Parameter name="shape" value="rectangle"/>
+        <Parameter name="width" value="70"/>
+        <Parameter name="height" value="70"/>
+        <Parameter name="center_x" value="0"/>
+        <Parameter name="center_y" value="0"/>
+      </Parameters>
+    </Generator>
+    
+    <!-- Services 1 visitors -->
+    <Generator type="Random">
+      <Parameters>
+        <Parameter name="agent_template" value="6"/>
+        <Parameter name="count" value="23"/>
+        <Parameter name="shape" value="rectangle"/>
+        <Parameter name="width" value="70"/>
+        <Parameter name="height" value="70"/>
+        <Parameter name="center_x" value="0"/>
+        <Parameter name="center_y" value="0"/>
+      </Parameters>
+    </Generator>
+    
+    <!-- Services 2 visitors -->
+    <Generator type="Random">
+      <Parameters>
+        <Parameter name="agent_template" value="7"/>
+        <Parameter name="count" value="23"/>
+        <Parameter name="shape" value="rectangle"/>
+        <Parameter name="width" value="70"/>
+        <Parameter name="height" value="70"/>
+        <Parameter name="center_x" value="0"/>
+        <Parameter name="center_y" value="0"/>
+      </Parameters>
+    </Generator>
+    
+    <!-- Additional main stage visitors -->
+    <Generator type="Random">
+      <Parameters>
+        <Parameter name="agent_template" value="0"/>
+        <Parameter name="count" value="15"/>
+        <Parameter name="shape" value="rectangle"/>
+        <Parameter name="width" value="70"/>
+        <Parameter name="height" value="70"/>
+        <Parameter name="center_x" value="0"/>
+        <Parameter name="center_y" value="0"/>
+      </Parameters>
+    </Generator>
+    
+    <!-- Additional stage 1 visitors -->
+    <Generator type="Random">
+      <Parameters>
+        <Parameter name="agent_template" value="1"/>
+        <Parameter name="count" value="11"/>
+        <Parameter name="shape" value="rectangle"/>
+        <Parameter name="width" value="70"/>
+        <Parameter name="height" value="70"/>
+        <Parameter name="center_x" value="0"/>
+        <Parameter name="center_y" value="0"/>
+      </Parameters>
+    </Generator>
+    
+    <!-- Additional stage 2 visitors -->
+    <Generator type="Random">
+      <Parameters>
+        <Parameter name="agent_template" value="2"/>
+        <Parameter name="count" value="11"/>
+        <Parameter name="shape" value="rectangle"/>
+        <Parameter name="width" value="70"/>
+        <Parameter name="height" value="70"/>
+        <Parameter name="center_x" value="0"/>
+        <Parameter name="center_y" value="0"/>
       </Parameters>
     </Generator>
   </Agents>
-  
-  <AgentInteraction>
-    <Algorithm type="ORCA">
-      <Parameters>
-        <Parameter name="tau" value="1.0" />
-        <Parameter name="neighbor_dist" value="5.0" />
-      </Parameters>
-    </Algorithm>
-  </AgentInteraction>
-  
-  <Duration value="600.0" /> <!-- 10 minutes of simulation -->
-  <TimeStep value="0.05" />
-  <OutputData folder="output_data" />
-</Experiment> 
+</Simulation> 

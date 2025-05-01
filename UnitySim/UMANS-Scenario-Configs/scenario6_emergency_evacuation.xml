@@ -1,75 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Experiment>
+<Simulation delta_time="0.05" end_time="180.0">
   <Description>Emergency Evacuation - Panic-driven evacuation of a building</Description>
   
-  <World>
-    <Objects>
+  <World type="Infinite">
+    <Obstacles>
       <!-- Building outer walls -->
-      <Object name="wall_top" type="Rectangle" x="0" y="25" width="50" height="1" />
-      <Object name="wall_bottom" type="Rectangle" x="0" y="-25" width="50" height="1" />
-      <Object name="wall_left" type="Rectangle" x="-25" y="0" width="1" height="50" />
-      <Object name="wall_right" type="Rectangle" x="25" y="0" width="1" height="50" />
+      <!-- Top wall -->
+      <Obstacle>
+        <Point x="-25" y="25"/>
+        <Point x="25" y="25"/>
+        <Point x="25" y="24"/>
+        <Point x="-25" y="24"/>
+      </Obstacle>
+      
+      <!-- Bottom wall - left part -->
+      <Obstacle>
+        <Point x="-25" y="-24"/>
+        <Point x="-10" y="-24"/>
+        <Point x="-10" y="-25"/>
+        <Point x="-25" y="-25"/>
+      </Obstacle>
+      
+      <!-- Bottom wall - right part (with gap for exit) -->
+      <Obstacle>
+        <Point x="10" y="-24"/>
+        <Point x="25" y="-24"/>
+        <Point x="25" y="-25"/>
+        <Point x="10" y="-25"/>
+      </Obstacle>
+      
+      <!-- Left wall -->
+      <Obstacle>
+        <Point x="-25" y="24"/>
+        <Point x="-24" y="24"/>
+        <Point x="-24" y="-24"/>
+        <Point x="-25" y="-24"/>
+      </Obstacle>
+      
+      <!-- Right wall -->
+      <Obstacle>
+        <Point x="24" y="24"/>
+        <Point x="25" y="24"/>
+        <Point x="25" y="-24"/>
+        <Point x="24" y="-24"/>
+      </Obstacle>
       
       <!-- Inner walls/obstacles -->
-      <Object name="inner_wall1" type="Rectangle" x="-15" y="10" width="20" height="1" />
-      <Object name="inner_wall2" type="Rectangle" x="15" y="0" width="20" height="1" />
-      <Object name="inner_wall3" type="Rectangle" x="-15" y="-10" width="20" height="1" />
-      <Object name="inner_wall4" type="Rectangle" x="-5" y="0" width="1" height="20" />
+      <Obstacle>
+        <Point x="-25" y="10"/>
+        <Point x="-5" y="10"/>
+        <Point x="-5" y="9"/>
+        <Point x="-25" y="9"/>
+      </Obstacle>
       
-      <!-- Emergency exit - small opening in bottom wall -->
-      <Object name="exit_wall_left" type="Rectangle" x="-20" y="-25" width="10" height="1" />
-      <Object name="exit_wall_right" type="Rectangle" x="20" y="-25" width="10" height="1" />
-    </Objects>
+      <Obstacle>
+        <Point x="5" y="0"/>
+        <Point x="25" y="0"/>
+        <Point x="25" y="-1"/>
+        <Point x="5" y="-1"/>
+      </Obstacle>
+      
+      <Obstacle>
+        <Point x="-25" y="-10"/>
+        <Point x="-5" y="-10"/>
+        <Point x="-5" y="-11"/>
+        <Point x="-25" y="-11"/>
+      </Obstacle>
+      
+      <Obstacle>
+        <Point x="-5" y="10"/>
+        <Point x="-4" y="10"/>
+        <Point x="-4" y="-10"/>
+        <Point x="-5" y="-10"/>
+      </Obstacle>
+    </Obstacles>
   </World>
   
-  <PolicyMakers>
-    <PolicyMaker name="PM-exit-left" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="2.0" /> <!-- Faster speed due to panic -->
-        <Parameter name="goal_point" value="-10,-35" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-exit-center" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="2.0" />
-        <Parameter name="goal_point" value="0,-35" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-exit-right" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="2.0" />
-        <Parameter name="goal_point" value="10,-35" />
-      </Parameters>
-    </PolicyMaker>
-  </PolicyMakers>
+  <Policies>
+    <Policy id="0" OptimizationMethod="global" RelaxationTime="0.5">
+      <costfunction range="5" name="ORCA" timeHorizon="1.0"/>
+    </Policy>
+  </Policies>
   
   <Agents>
-    <!-- Randomly distributed agents throughout the building -->
-    <Generator type="RandomGenerator">
+    <!-- Template agents for the three exit directions -->
+    <Agent id="0" rad="0.25" pref_speed="2.0" max_speed="2.5">
+      <pos x="0" y="0"/>
+      <goal x="-10" y="-35"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <Agent id="1" rad="0.25" pref_speed="2.0" max_speed="2.5">
+      <pos x="0" y="0"/>
+      <goal x="0" y="-35"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <Agent id="2" rad="0.25" pref_speed="2.0" max_speed="2.5">
+      <pos x="0" y="0"/>
+      <goal x="10" y="-35"/>
+      <Policy id="0"/>
+    </Agent>
+    
+    <!-- Random distribution of agents with different goals -->
+    <!-- Left exit agents (30%) -->
+    <Generator type="Random">
       <Parameters>
-        <Parameter name="policy_maker_distribution" value="PM-exit-left=0.3;PM-exit-center=0.4;PM-exit-right=0.3" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="count" value="350" />
-        <Parameter name="position_region" value="Rectangle,-23,23,46,46" />
+        <Parameter name="agent_template" value="0"/>
+        <Parameter name="count" value="105"/>
+        <Parameter name="shape" value="rectangle"/>
+        <Parameter name="width" value="46"/>
+        <Parameter name="height" value="46"/>
+        <Parameter name="center_x" value="0"/>
+        <Parameter name="center_y" value="0"/>
+      </Parameters>
+    </Generator>
+    
+    <!-- Center exit agents (40%) -->
+    <Generator type="Random">
+      <Parameters>
+        <Parameter name="agent_template" value="1"/>
+        <Parameter name="count" value="140"/>
+        <Parameter name="shape" value="rectangle"/>
+        <Parameter name="width" value="46"/>
+        <Parameter name="height" value="46"/>
+        <Parameter name="center_x" value="0"/>
+        <Parameter name="center_y" value="0"/>
+      </Parameters>
+    </Generator>
+    
+    <!-- Right exit agents (30%) -->
+    <Generator type="Random">
+      <Parameters>
+        <Parameter name="agent_template" value="2"/>
+        <Parameter name="count" value="105"/>
+        <Parameter name="shape" value="rectangle"/>
+        <Parameter name="width" value="46"/>
+        <Parameter name="height" value="46"/>
+        <Parameter name="center_x" value="0"/>
+        <Parameter name="center_y" value="0"/>
       </Parameters>
     </Generator>
   </Agents>
-  
-  <AgentInteraction>
-    <Algorithm type="ORCA">
-      <Parameters>
-        <Parameter name="tau" value="0.5" /> <!-- Shorter time horizon due to panic -->
-        <Parameter name="neighbor_dist" value="5.0" />
-        <Parameter name="time_horizon" value="1.0" /> <!-- Shorter time horizon for agent-agent avoidance -->
-        <Parameter name="time_horizon_obst" value="0.75" /> <!-- Shorter time horizon for obstacle avoidance -->
-      </Parameters>
-    </Algorithm>
-  </AgentInteraction>
-  
-  <Duration value="180.0" /> <!-- 3 minutes of simulation -->
-  <TimeStep value="0.05" />
-  <OutputData folder="output_data" />
-</Experiment> 
+</Simulation> 

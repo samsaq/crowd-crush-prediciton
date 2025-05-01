@@ -1,107 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Experiment>
+<Simulation delta_time="0.05" end_time="240.0">
   <Description>Stadium Entrance - Funnel-shaped entrance causing bottleneck</Description>
   
-  <World>
-    <Objects>
+  <World type="Infinite">
+    <Obstacles>
       <!-- Funnel entrance structure -->
-      <Object name="funnel_top_left" type="Rectangle" x="-40" y="20" width="30" height="1" />
-      <Object name="funnel_top_right" type="Rectangle" x="10" y="20" width="30" height="1" />
-      <Object name="funnel_bottom_left" type="Rectangle" x="-40" y="-20" width="30" height="1" />
-      <Object name="funnel_bottom_right" type="Rectangle" x="10" y="-20" width="30" height="1" />
+      <Obstacle>
+        <Point x="-40" y="20.5"/>
+        <Point x="-10" y="20.5"/>
+        <Point x="-10" y="19.5"/>
+        <Point x="-40" y="19.5"/>
+      </Obstacle>
+      <Obstacle>
+        <Point x="10" y="20.5"/>
+        <Point x="40" y="20.5"/>
+        <Point x="40" y="19.5"/>
+        <Point x="10" y="19.5"/>
+      </Obstacle>
+      <Obstacle>
+        <Point x="-40" y="-19.5"/>
+        <Point x="-10" y="-19.5"/>
+        <Point x="-10" y="-20.5"/>
+        <Point x="-40" y="-20.5"/>
+      </Obstacle>
+      <Obstacle>
+        <Point x="10" y="-19.5"/>
+        <Point x="40" y="-19.5"/>
+        <Point x="40" y="-20.5"/>
+        <Point x="10" y="-20.5"/>
+      </Obstacle>
       
       <!-- Funnel converging walls -->
-      <Object name="funnel_left_top" type="Rectangle" x="-10" y="15" width="1" height="10" />
-      <Object name="funnel_left_bottom" type="Rectangle" x="-10" y="-15" width="1" height="10" />
-      <Object name="funnel_right_top" type="Rectangle" x="10" y="15" width="1" height="10" />
-      <Object name="funnel_right_bottom" type="Rectangle" x="10" y="-15" width="1" height="10" />
+      <Obstacle>
+        <Point x="-10" y="25"/>
+        <Point x="-9" y="25"/>
+        <Point x="-9" y="15"/>
+        <Point x="-10" y="15"/>
+      </Obstacle>
+      <Obstacle>
+        <Point x="-10" y="-15"/>
+        <Point x="-9" y="-15"/>
+        <Point x="-9" y="-25"/>
+        <Point x="-10" y="-25"/>
+      </Obstacle>
+      <Obstacle>
+        <Point x="10" y="25"/>
+        <Point x="11" y="25"/>
+        <Point x="11" y="15"/>
+        <Point x="10" y="15"/>
+      </Obstacle>
+      <Obstacle>
+        <Point x="10" y="-15"/>
+        <Point x="11" y="-15"/>
+        <Point x="11" y="-25"/>
+        <Point x="10" y="-25"/>
+      </Obstacle>
       
       <!-- Security check/ticket gate - narrow entrances -->
-      <Object name="gate_top" type="Rectangle" x="0" y="5" width="20" height="1" />
-      <Object name="gate_bottom" type="Rectangle" x="0" y="-5" width="20" height="1" />
-      <Object name="gate_middle1" type="Rectangle" x="0" y="2" width="19" height="1" />
-      <Object name="gate_middle2" type="Rectangle" x="0" y="-2" width="19" height="1" />
-    </Objects>
+      <Obstacle>
+        <Point x="0" y="5.5"/>
+        <Point x="20" y="5.5"/>
+        <Point x="20" y="4.5"/>
+        <Point x="0" y="4.5"/>
+      </Obstacle>
+      <Obstacle>
+        <Point x="0" y="-4.5"/>
+        <Point x="20" y="-4.5"/>
+        <Point x="20" y="-5.5"/>
+        <Point x="0" y="-5.5"/>
+      </Obstacle>
+      <Obstacle>
+        <Point x="0" y="2.5"/>
+        <Point x="19" y="2.5"/>
+        <Point x="19" y="1.5"/>
+        <Point x="0" y="1.5"/>
+      </Obstacle>
+      <Obstacle>
+        <Point x="0" y="-1.5"/>
+        <Point x="19" y="-1.5"/>
+        <Point x="19" y="-2.5"/>
+        <Point x="0" y="-2.5"/>
+      </Obstacle>
+    </Obstacles>
   </World>
   
-  <PolicyMakers>
-    <PolicyMaker name="PM-approach" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.2" />
-        <Parameter name="goal_point" value="-5,0" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-enter-top" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.0" />
-        <Parameter name="goal_point" value="5,3.5" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-enter-bottom" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.0" />
-        <Parameter name="goal_point" value="5,-3.5" />
-      </Parameters>
-    </PolicyMaker>
-    
-    <PolicyMaker name="PM-exit" type="DesiredVelocityPolicy">
-      <Parameters>
-        <Parameter name="desired_speed" value="1.2" />
-        <Parameter name="goal_point" value="40,0" />
-      </Parameters>
-    </PolicyMaker>
-  </PolicyMakers>
+  <Policies>
+    <Policy id="0" OptimizationMethod="sampling" RelaxationTime="1.0">
+      <costfunction range="5" name="ORCA" timeHorizon="1.0"/>
+    </Policy>
+  </Policies>
   
   <Agents>
+    <!-- Template agents for different behaviors -->
+    <Agent id="approaching" rad="0.25" pref_speed="1.2" max_speed="1.8">
+      <pos x="-30" y="0"/>
+      <goal x="-5" y="0"/>
+      <Policy id="0"/>
+    </Agent>
+    <Agent id="ticket_north" rad="0.25" pref_speed="1.0" max_speed="1.8">
+      <pos x="-5" y="0"/>
+      <goal x="5" y="3.5"/>
+      <Policy id="0"/>
+    </Agent>
+    <Agent id="ticket_south" rad="0.25" pref_speed="1.0" max_speed="1.8">
+      <pos x="-5" y="0"/>
+      <goal x="5" y="-3.5"/>
+      <Policy id="0"/>
+    </Agent>
+    <Agent id="inside_stadium" rad="0.3" pref_speed="1.2" max_speed="1.8">
+      <pos x="5" y="0"/>
+      <goal x="25" y="0"/>
+      <Policy id="0"/>
+    </Agent>
+    
     <!-- Approaching crowd outside stadium -->
-    <Generator type="GridGenerator">
+    <Generator type="Grid">
       <Parameters>
-        <Parameter name="policy_maker" value="PM-approach" />
-        <Parameter name="agent_radius" value="0.25" />
-        <Parameter name="agent_mass" value="75" />
-        <Parameter name="row_count" value="15" />
-        <Parameter name="col_count" value="10" />
-        <Parameter name="row_gap" value="1.0" />
-        <Parameter name="col_gap" value="1.0" />
-        <Parameter name="pos_x" value="-30" />
-        <Parameter name="pos_y" value="0" />
-        <Parameter name="noise" value="0.3" />
+        <Parameter name="agent_template" value="approaching"/>
+        <Parameter name="rows" value="10"/>
+        <Parameter name="cols" value="7"/>
+        <Parameter name="row_gap" value="1.0"/>
+        <Parameter name="col_gap" value="1.0"/>
+        <Parameter name="center_x" value="-30"/>
+        <Parameter name="center_y" value="0"/>
+        <Parameter name="noise" value="0.3"/>
       </Parameters>
     </Generator>
     
-    <!-- Controllers/security at checkpoints -->
-    <Agent>
+    <!-- Agents choosing northern ticket gate -->
+    <Generator type="Random">
       <Parameters>
-        <Parameter name="radius" value="0.3" />
-        <Parameter name="mass" value="80" />
-        <Parameter name="policy_id" value="0" />
+        <Parameter name="agent_template" value="ticket_north"/>
+        <Parameter name="count" value="20"/>
+        <Parameter name="region_type" value="Rectangle"/>
+        <Parameter name="region_x" value="-5"/>
+        <Parameter name="region_y" value="0"/>
+        <Parameter name="region_width" value="2"/>
+        <Parameter name="region_height" value="6"/>
       </Parameters>
-      <Position x="0" y="3.5" />
-      <PolicyMakerID value="PM-exit" />
+    </Generator>
+    
+    <!-- Agents choosing southern ticket gate -->
+    <Generator type="Random">
+      <Parameters>
+        <Parameter name="agent_template" value="ticket_south"/>
+        <Parameter name="count" value="20"/>
+        <Parameter name="region_type" value="Rectangle"/>
+        <Parameter name="region_x" value="-5"/>
+        <Parameter name="region_y" value="0"/>
+        <Parameter name="region_width" value="2"/>
+        <Parameter name="region_height" value="6"/>
+      </Parameters>
+    </Generator>
+    
+    <!-- Agents who passed through security and entering stadium -->
+    <Generator type="Random">
+      <Parameters>
+        <Parameter name="agent_template" value="inside_stadium"/>
+        <Parameter name="count" value="10"/>
+        <Parameter name="region_type" value="Rectangle"/>
+        <Parameter name="region_x" value="5"/>
+        <Parameter name="region_y" value="0"/>
+        <Parameter name="region_width" value="2"/>
+        <Parameter name="region_height" value="8"/>
+      </Parameters>
+    </Generator>
+    
+    <!-- Security/staff at checkpoints -->
+    <Agent id="security_north" rad="0.3" pref_speed="0.5" max_speed="1.0">
+      <pos x="0" y="3.5"/>
+      <goal x="0" y="3.5"/>
+      <Policy id="0"/>
     </Agent>
-    <Agent>
-      <Parameters>
-        <Parameter name="radius" value="0.3" />
-        <Parameter name="mass" value="80" />
-        <Parameter name="policy_id" value="0" />
-      </Parameters>
-      <Position x="0" y="-3.5" />
-      <PolicyMakerID value="PM-exit" />
+    <Agent id="security_south" rad="0.3" pref_speed="0.5" max_speed="1.0">
+      <pos x="0" y="-3.5"/>
+      <goal x="0" y="-3.5"/>
+      <Policy id="0"/>
     </Agent>
   </Agents>
-  
-  <AgentInteraction>
-    <Algorithm type="ORCA">
-      <Parameters>
-        <Parameter name="tau" value="1.0" />
-        <Parameter name="neighbor_dist" value="5.0" />
-      </Parameters>
-    </Algorithm>
-  </AgentInteraction>
-  
-  <Duration value="240.0" /> <!-- 4 minutes of simulation -->
-  <TimeStep value="0.05" />
-  <OutputData folder="output_data" />
-</Experiment> 
+</Simulation> 
