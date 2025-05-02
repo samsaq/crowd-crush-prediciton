@@ -1,5 +1,6 @@
 import argparse
 import os
+import math
 import cv2
 import numpy as np
 from PIL import Image
@@ -95,7 +96,13 @@ def visualization(samples, pred, vis_dir, img_path, split_map=None):
         size = 3
         for p in pred[idx]:
             sample_vis = cv2.circle(sample_vis, (int(p[1]), int(p[0])), size, (0, 255, 0), -1)
+            res = check_crowd_crush(p[1], p[0], 25, pred[idx])
+            if res:
+                #for j in res:
+                    #sample_vis = cv2.circle(sample_vis, (int(j[1]), int(j[0])), 8, (0, 0, 255), -1)
+                sample_vis = cv2.circle(sample_vis, (int(p[1]), int(p[0])), 5, (255, 0, 0), -1)
         
+        """
         # draw split map
         if split_map is not None:
             imgH, imgW = sample_vis.shape[:2]
@@ -103,6 +110,7 @@ def visualization(samples, pred, vis_dir, img_path, split_map=None):
             split_map = cv2.applyColorMap(split_map, cv2.COLORMAP_JET)
             split_map = cv2.resize(split_map, (imgW, imgH), interpolation=cv2.INTER_NEAREST)
             sample_vis = split_map * 0.9 + sample_vis
+        """
         
         # save image
         if vis_dir is not None:
@@ -116,6 +124,23 @@ def visualization(samples, pred, vis_dir, img_path, split_map=None):
             img_save_path = os.path.join(vis_dir, '{}_pred{}.jpg'.format(name, len(pred[idx])))
             cv2.imwrite(img_save_path, sample_vis)
             print('image save to ', img_save_path)
+
+
+def check_crowd_crush(circle_x, circle_y, circle_radius, points):
+    res=[]
+    for y1, x1 in points:  # x1,y1 points to check is it inside or not
+        if (y1 == circle_y and x1 == circle_x):
+            #print("skipping this point.")
+            continue
+        
+        if (x1-circle_x)**2+(y1-circle_y)**2 <= circle_radius * circle_radius:
+            res.append([y1,x1])
+
+    if len(res) > 5:
+        print("CROWD CRUSH DETECTED AT: ({}, {})".format(circle_x, circle_y))
+        return res
+    return None
+
 
 
 @torch.no_grad()
@@ -156,7 +181,7 @@ def evaluate_single_image(model, img_path, device, vis_dir=None):
 
 def main(args):
     # input image and model
-    args.img_path = './test_imgs/2.jpg'
+    args.img_path = './test_imgs/1.jpg'
     args.resume = './pretrained/SHA_model.pth'
     args.vis_dir = './visualization'
 
