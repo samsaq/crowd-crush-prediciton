@@ -156,9 +156,9 @@ def evaluate_single_image(model, img_path, device, vis_dir=None):
 
 def main(args):
     # input image and model
-    args.img_path = 'your_image_path'
-    args.resume = 'your_model_path'
-    args.vis_dir = ''
+    args.img_path = './test_imgs/2.jpg'
+    args.resume = './pretrained/SHA_model.pth'
+    args.vis_dir = './visualization'
 
     # build model
     device = torch.device(args.device)

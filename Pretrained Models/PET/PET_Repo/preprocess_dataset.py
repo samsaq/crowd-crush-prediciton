@@ -214,7 +214,7 @@ if __name__ == '__main__':
 
     # UCF_QNRF | JHU_Crowd | NWPU_Crowd
     dataset = "UCF_QNRF"
-    data_root = "your_data_path"
+    data_root = "C:\\Users\\mason\\Desktop\\PET-main\\data\\UCF-QNRF_1536"
     
     if dataset == "UCF_QNRF":
         down_size = 1536    # downsample size
