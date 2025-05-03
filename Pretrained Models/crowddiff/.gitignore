@@ -1,0 +1,8 @@
+.DS_Store
+__pycache__/
+/primary_datasets/*
+/datasets/*
+/ShanghaiTech_Crowd_Counting_Dataset/*
+/venv/*
+/experiments/
+64_256_upsampler.pt

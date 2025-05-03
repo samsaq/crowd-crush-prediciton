@@ -1,2 +1,3 @@
 ./venv/
 UnitySim/UMANS-Scenario-Configs/result_csvs/density_maps/*
+/ConvLSTM/VisDrone2020-CC
