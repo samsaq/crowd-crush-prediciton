@@ -7,7 +7,11 @@ import torch
 import torchvision.transforms as standard_transforms
 from tqdm import tqdm
 
-import PET_Repo.util.misc as utils
+import sys 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+pet_dir = os.path.dirname(os.path.dirname(current_dir))  # Go up two levels to reach PET directory
+sys.path.append(pet_dir)
+from PET_Repo.util import misc as utils
 from PET_Repo.models import build_model
 
 

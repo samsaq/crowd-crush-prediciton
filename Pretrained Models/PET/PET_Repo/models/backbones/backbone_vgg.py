@@ -8,7 +8,7 @@ import torch.nn.functional as F
 import torchvision
 from torch import nn
 
-from util.misc import NestedTensor
+from PET_Repo.util.misc import NestedTensor
 from .vgg import *
 from ..position_encoding import build_position_encoding
 
